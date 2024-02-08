@@ -26,4 +26,25 @@ class BookSerializer(serializers.ModelSerializer):
         instance.price = validated_data.get('price', instance.price)
         instance.save()
         return instance
-   
+    
+
+class BookSeachQuery(serializers.Serializer):
+    title = serializers.CharField(required = False)
+    author = serializers.CharField(required = False)
+    genre = serializers.CharField(required = False)
+    sort = serializers.ChoiceField(choices=['title', 'author', 'genre', 'price'], required = False)
+    order = serializers.ChoiceField(choices=['ASC', 'DESC'], required = False)
+    
+
+class BookSearchResponse(serializers.Serializer):
+    books = BookSerializer(many = True)
+
+class BookNotFound(serializers.Serializer):
+    error = serializers.CharField()
+
+class InvalidBookData(serializers.Serializer):
+    title = serializers.ListField(child = serializers.CharField(), required = False)
+    author = serializers.ListField(child = serializers.CharField(), required = False)
+    genre = serializers.ListField(child = serializers.CharField(), required = False)
+    area = serializers.ListField(child = serializers.CharField(), required = False)
+    price  = serializers.ListField(child = serializers.CharField(), required = False)

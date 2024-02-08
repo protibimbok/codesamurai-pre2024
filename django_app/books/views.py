@@ -3,15 +3,23 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from books.models import Book
-from books.serializers import BookSerializer
+from books.serializers import *
 
 
 @swagger_auto_schema(
     method='POST',
-    request_body=BookSerializer,  # Specify request body
+    request_body=BookSerializer, 
     responses={
         201: BookSerializer,
-    }  # Specify response type
+        400: InvalidBookData
+    }
+)
+@swagger_auto_schema(
+    method='GET',
+    query_serializer=BookSeachQuery, 
+    responses={
+        200: BookSearchResponse
+    }
 )
 @api_view(['GET', 'POST'])
 def get_or_add_books(request):
@@ -40,6 +48,8 @@ def get_or_add_books(request):
     request_body=BookSerializer,
     responses={
         201: BookSerializer,
+        404: BookNotFound,
+        400: InvalidBookData
     } 
 )
 
@@ -48,6 +58,7 @@ def get_or_add_books(request):
     request_body=None,
     responses={
         201: BookSerializer,
+        404: BookNotFound
     } 
 )
 @api_view(['GET', 'PUT'])
