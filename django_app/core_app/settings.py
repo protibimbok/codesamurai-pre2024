@@ -11,9 +11,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from os import getenv as env
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv()
+
+print("\n\n\n\n\n" + env('DATABASE_ENGINE'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -78,13 +85,12 @@ WSGI_APPLICATION = 'core_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_rest_test',  # Database name
-        'USER': 'root',              # MySQL user
-        'PASSWORD': '1234',          # MySQL password
-        'HOST': 'mysql_server',      # Docker Compose service name
-        'PORT': '3306',
-        
+        'ENGINE': env('DATABASE_ENGINE'),
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
