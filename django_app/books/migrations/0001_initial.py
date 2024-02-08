@@ -17,7 +17,6 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.TextField()),
                 ('author', models.TextField()),
-                ('area', models.TextField()),
                 ('genre', models.TextField()),
                 ('price', models.FloatField()),
             ],

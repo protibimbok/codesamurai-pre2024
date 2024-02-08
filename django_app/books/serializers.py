@@ -23,7 +23,6 @@ class BookSerializer(serializers.ModelSerializer):
         """
         instance.title = validated_data.get('title', instance.title)
         instance.author = validated_data.get('author', instance.author)
-        instance.area = validated_data.get('area', instance.area)
         instance.genre = validated_data.get('genre', instance.genre)
         instance.price = validated_data.get('price', instance.price)
         instance.save()
