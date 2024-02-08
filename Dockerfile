@@ -11,6 +11,9 @@ RUN apt-get update \
 # Copy the current directory contents into the container at /app
 COPY ./django_app /app
 
+# Copy the .env
+COPY /django_app/.env.example /app/.env.test
+
 # Set the working directory in the container
 WORKDIR /app
 
