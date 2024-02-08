@@ -2,13 +2,10 @@ from rest_framework import serializers
 from books.models import Book
 
 
-class BookSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    title = serializers.CharField()
-    author = serializers.CharField()
-    area = serializers.CharField()
-    genre = serializers.CharField()
-    price = serializers.FloatField()
+class BookSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Book
+        fields = "__all__"
     
 
     def create(self, validated_data):
