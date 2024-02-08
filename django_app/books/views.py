@@ -66,7 +66,7 @@ def update_book(request, id):
     try:
         book = Book.objects.get(pk=id)
     except Book.DoesNotExist:
-        return Response("book with id: %d was not found" % id, status=status.HTTP_404_NOT_FOUND)
+        return Response({ "message": "book with id: %d was not found" % id }, status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
         serializer = BookSerializer(book)
