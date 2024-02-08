@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from books.models import Book
+from drf_yasg import openapi
 
+from utils.api_helper import get_serializer_schema_err
 
 class BookSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required = False)
@@ -36,15 +38,13 @@ class BookSeachQuery(serializers.Serializer):
     order = serializers.ChoiceField(choices=['ASC', 'DESC'], required = False)
     
 
-class BookSearchResponse(serializers.Serializer):
-    books = BookSerializer(many = True)
+BookNotFound = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'message': openapi.Schema(
+            type=openapi.TYPE_STRING
+        )
+    }
+)
 
-class BookNotFound(serializers.Serializer):
-    error = serializers.CharField()
-
-class InvalidBookData(serializers.Serializer):
-    title = serializers.ListField(child = serializers.CharField(), required = False)
-    author = serializers.ListField(child = serializers.CharField(), required = False)
-    genre = serializers.ListField(child = serializers.CharField(), required = False)
-    area = serializers.ListField(child = serializers.CharField(), required = False)
-    price  = serializers.ListField(child = serializers.CharField(), required = False)
+InvalidBookData = get_serializer_schema_err(BookSerializer)

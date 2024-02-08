@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from books.models import Book
 from books.serializers import *
+from utils.api_helper import get_serializer_schema
 
 
 @swagger_auto_schema(
@@ -18,7 +19,10 @@ from books.serializers import *
     method='GET',
     query_serializer=BookSeachQuery, 
     responses={
-        200: BookSearchResponse
+        200: openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items= get_serializer_schema(BookSerializer)
+        )
     }
 )
 @api_view(['GET', 'POST'])
