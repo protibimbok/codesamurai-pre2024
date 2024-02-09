@@ -13,7 +13,7 @@ import datetime
 
 def dijkstra_for_cheapest_route(station_from, station_to):
     # Initialize distances to all nodes as infinity except the start node
-    init_stops = Stop.objects.filter(station_id_pk = station_from)
+    init_stops = Stop.objects.filter(station_id = station_from)
     print(init_stops)
 
     totaltime = 0
@@ -27,7 +27,7 @@ def dijkstra_for_cheapest_route(station_from, station_to):
     times = {}
     stations = Station.objects.all()
     for station in stations:
-        costs[station.id] = 10000000000000000000
+        costs[station.station_id] = 10000000000000000000
     costs[station_from] = 0
     times[station_from] = init_stops.order_by('arrival_time').first().arrival_time
     pqpath = []
@@ -56,14 +56,14 @@ def dijkstra_for_cheapest_route(station_from, station_to):
             path.reverse()
             break
 
-        train_stop = Stop.objects.filter(train_id_pk = current_train, arrival_time__gte = dep_time).order_by('arrival_time').first()
+        train_stop = Stop.objects.filter(train_id = current_train, arrival_time__gte = dep_time).order_by('arrival_time').first()
         
         if costs[train_stop.station_id.id] > current_fare + train_stop.fare:
 
             costs[train_stop.station_id.id] = current_fare + train_stop.fare
             times[train_stop.station_id.id] = train_stop.arrival_time
 
-            stops = Stop.objects.filter(station_id_pk = train_stop.station_id.id, departure_time__gte = train_stop.arrival_time)
+            stops = Stop.objects.filter(station_id = train_stop.station_id.id, departure_time__gte = train_stop.arrival_time)
             for stop in stops:
                 pq.put((costs[train_stop.station_id.id], stop.station_id.id, stop.train_id.id, stop.departure_time, len(pqpath)))
                 pqpath.append((ind, train_stop.id))
@@ -77,7 +77,7 @@ def dijkstra_for_shortesttime_route(station_from, station_to):
 
 
     # Initialize distances to all nodes as infinity except the start node
-    init_stops = Stop.objects.filter(station_id_pk = station_from)
+    init_stops = Stop.objects.filter(station_id = station_from)
     print(init_stops)
 
     totaltime = 0
@@ -91,7 +91,7 @@ def dijkstra_for_shortesttime_route(station_from, station_to):
     times = {}
     stations = Station.objects.all()
     for station in stations:
-        times[station.id] = datetime.datetime(2200, 12, 1, 23, 59, 59, 999999)
+        times[station.station_id] = datetime.datetime(2200, 12, 1, 23, 59, 59, 999999)
 
     costs[station_from] = 0
     times[station_from] = init_stops.order_by('arrival_time').first().arrival_time
@@ -121,14 +121,14 @@ def dijkstra_for_shortesttime_route(station_from, station_to):
             path.reverse()
             break
 
-        train_stop = Stop.objects.filter(train_id_pk = current_train, arrival_time__gte = dep_time).order_by('arrival_time').first()
+        train_stop = Stop.objects.filter(train_id = current_train, arrival_time__gte = dep_time).order_by('arrival_time').first()
         
         if times[train_stop.station_id.id] > train_stop.arrival_time:
 
             costs[train_stop.station_id.id] = current_fare + train_stop.fare
             times[train_stop.station_id.id] = train_stop.arrival_time
 
-            stops = Stop.objects.filter(station_id_pk = train_stop.station_id.id, departure_time__gte = train_stop.arrival_time)
+            stops = Stop.objects.filter(station_id = train_stop.station_id.id, departure_time__gte = train_stop.arrival_time)
             for stop in stops:
                 pq.put((train_stop.arrival_time, costs[train_stop.station_id.id], stop.station_id.id, stop.train_id.id, stop.departure_time, len(pqpath)))
                 pqpath.append((ind, train_stop.id))
