@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # Project apps
-    'books'
+    'train_app'
 ]
 
 MIDDLEWARE = [
