@@ -10,18 +10,27 @@ from station_app.models import *
 # Create your tests here.
 from queue import PriorityQueue
 import datetime
+from django.test import TestCase
+from train_app.models import *
+from users_app.models import *
+from station_app.models import *
+# Create your tests here.
+from queue import PriorityQueue
+import datetime
 
-def dijkstra_for_cheapest_route(station_from, station_to):
+def dijkstra_for_cheapest_route(station_from, station_to, timeafter):
     # Initialize distances to all nodes as infinity except the start node
-    init_stops = Stop.objects.filter(station_id = station_from)
+
+        
+    init_stops = Stop.objects.filter(station_id = station_from,arrival_time__gte = timeafter)
     print(init_stops)
 
     totaltime = 0
     totalcost = 0
     path = []
 
-    if init_stops.count == 0:
-        return 
+    if init_stops.exists() == False:
+        return (totalcost, totaltime, path)
     
     costs = {}
     times = {}
@@ -34,8 +43,8 @@ def dijkstra_for_cheapest_route(station_from, station_to):
     
     pq = PriorityQueue()
     for stop in init_stops:
-        pq.put((stop.fare, stop.station_id.id, stop.train_id.id, stop.departure_time, len(pqpath)))
-        pqpath.append((-1, stop.id))
+        pq.put((stop.fare, stop.station_id.station_id, stop.train_id.train_id, stop.departure_time, len(pqpath)))
+        pqpath.append((-1, stop.stop_id))
 
     while not pq.empty():
         # Pop the node with the smallest distance from the priority queue
@@ -58,15 +67,15 @@ def dijkstra_for_cheapest_route(station_from, station_to):
 
         train_stop = Stop.objects.filter(train_id = current_train, arrival_time__gte = dep_time).order_by('arrival_time').first()
         
-        if costs[train_stop.station_id.id] > current_fare + train_stop.fare:
+        if train_stop != None and costs[train_stop.station_id.station_id] > current_fare + train_stop.fare:
 
-            costs[train_stop.station_id.id] = current_fare + train_stop.fare
-            times[train_stop.station_id.id] = train_stop.arrival_time
+            costs[train_stop.station_id.station_id] = current_fare + train_stop.fare
+            times[train_stop.station_id.station_id] = train_stop.arrival_time
 
-            stops = Stop.objects.filter(station_id = train_stop.station_id.id, departure_time__gte = train_stop.arrival_time)
+            stops = Stop.objects.filter(station_id = train_stop.station_id.station_id, departure_time__gte = train_stop.arrival_time)
             for stop in stops:
-                pq.put((costs[train_stop.station_id.id], stop.station_id.id, stop.train_id.id, stop.departure_time, len(pqpath)))
-                pqpath.append((ind, train_stop.id))
+                pq.put((costs[train_stop.station_id.station_id], stop.station_id.station_id, stop.train_id.train_id, stop.departure_time, len(pqpath)))
+                pqpath.append((ind, train_stop.stop_id))
     
 
     return (totalcost, totaltime, path)
@@ -84,14 +93,14 @@ def dijkstra_for_shortesttime_route(station_from, station_to):
     totalcost = 0
     path = []
 
-    if init_stops.count == 0:
-        return 
+    if init_stops.exists() == False:
+        return (totalcost, totaltime, path)
     
     costs = {}
     times = {}
     stations = Station.objects.all()
     for station in stations:
-        times[station.station_id] = datetime.datetime(2200, 12, 1, 23, 59, 59, 999999)
+        times[station.staion_id] = datetime.datetime(2200, 12, 1, 23, 59, 59, 999999)
 
     costs[station_from] = 0
     times[station_from] = init_stops.order_by('arrival_time').first().arrival_time
@@ -99,8 +108,8 @@ def dijkstra_for_shortesttime_route(station_from, station_to):
     
     pq = PriorityQueue()
     for stop in init_stops:
-        pq.put((stop.arrival_time, stop.fare, stop.station_id.id, stop.train_id.id, stop.departure_time, len(pqpath)))
-        pqpath.append((-1, stop.id))
+        pq.put((stop.arrival_time, stop.fare, stop.station_id.staion_id, stop.train_id.train_id, stop.departure_time, len(pqpath)))
+        pqpath.append((-1, stop.stop_id))
 
     while not pq.empty():
         # Pop the node with the smallest distance from the priority queue
@@ -123,26 +132,28 @@ def dijkstra_for_shortesttime_route(station_from, station_to):
 
         train_stop = Stop.objects.filter(train_id = current_train, arrival_time__gte = dep_time).order_by('arrival_time').first()
         
-        if times[train_stop.station_id.id] > train_stop.arrival_time:
+        if train_stop != None and times[train_stop.station_id.station_id] > train_stop.arrival_time:
 
-            costs[train_stop.station_id.id] = current_fare + train_stop.fare
-            times[train_stop.station_id.id] = train_stop.arrival_time
+            costs[train_stop.station_id.station_id] = current_fare + train_stop.fare
+            times[train_stop.station_id.station_id] = train_stop.arrival_time
 
-            stops = Stop.objects.filter(station_id = train_stop.station_id.id, departure_time__gte = train_stop.arrival_time)
+            stops = Stop.objects.filter(station_id = train_stop.station_id.station_id, departure_time__gte = train_stop.arrival_time)
             for stop in stops:
-                pq.put((train_stop.arrival_time, costs[train_stop.station_id.id], stop.station_id.id, stop.train_id.id, stop.departure_time, len(pqpath)))
-                pqpath.append((ind, train_stop.id))
+                pq.put((train_stop.arrival_time, costs[train_stop.station_id.station_id], stop.station_id.station_id, stop.train_id.train_id, stop.departure_time, len(pqpath)))
+                pqpath.append((ind, train_stop.stop_id))
     
 
     return (totalcost, totaltime, path)
 
-def plan_optimal_route(station_from, station_to, order_by):
 
-    if order_by == "cost":
-        return dijkstra_for_cheapest_route(station_from, station_to)
+def plan_optimal_route(station_from, station_to, order_by, timeafter):
+
+    if timeafter != None :
+        return dijkstra_for_cheapest_route(station_from, station_to, timeafter)
+    elif order_by == "cost":
+        return dijkstra_for_cheapest_route(station_from, station_to, timeafter)
     else:
         return dijkstra_for_shortesttime_route(station_from, station_to)
-
 
 
 
@@ -178,10 +189,10 @@ def optimal_plan(request):
     if request.method != 'GET':
         return
     reqs = request.GET.dict()
-    (total_cost, total_time, stations) = plan_optimal_route(reqs['from'], reqs['to'], reqs['optimize'])
+    (total_cost, total_time, stations) = plan_optimal_route(reqs['from'], reqs['to'], reqs['optimize'], datetime.time.min)
     if len(stations) == 0:
         return Response({
-            "message": "no routes available from station: %d to station: %d" % (reqs['from'], reqs['to'])
+            "message": "no routes available from station: %s to station: %s" % (reqs['from'], reqs['to'])
         }, status = status.HTTP_403_FORBIDDEN)
     station_data = []
     for id in stations:
