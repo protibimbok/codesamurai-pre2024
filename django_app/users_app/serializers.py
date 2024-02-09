@@ -25,13 +25,8 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
-class UserSeachQuery(serializers.Serializer):
-    title = serializers.CharField(required = False)
-    author = serializers.CharField(required = False)
-    genre = serializers.CharField(required = False)
-    sort = serializers.ChoiceField(choices=['title', 'author', 'genre', 'price'], required = False)
-    order = serializers.ChoiceField(choices=['ASC', 'DESC'], required = False)
+class WalletSerializer(serializers.Serializer):
+    recharge = serializers.IntegerField()
 
 
 UserNotFound = openapi.Schema(
