@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # Project apps
-    'train_app'
+    'users_app',
+    'train_app',
+    'station_app',
 ]
 
 MIDDLEWARE = [
