@@ -11,8 +11,8 @@ class Train(models.Model):
 
 class Stop(models.Model):
     stop_id = models.AutoField(primary_key=True)
-    train_id = models.ForeignKey(Train, on_delete=models.CASCADE)
-    station_id = models.ForeignKey(Station, on_delete=models.CASCADE)
-    arrival_time = models.TextField()
-    departure_time = models.TextField()
+    train_id = models.ForeignKey(Train, on_delete=models.CASCADE, db_constraint = False)
+    station_id = models.ForeignKey(Station, on_delete=models.CASCADE, db_constraint = False)
+    arrival_time = models.TextField(null = True)
+    departure_time = models.TextField(null = True)
     fare = models.IntegerField()
