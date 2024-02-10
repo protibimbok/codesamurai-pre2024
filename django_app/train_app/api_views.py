@@ -38,7 +38,7 @@ def trains_root(request):
         start_time = end_time = ''
         if num_stations > 0:
             start_time = stops[0]['departure_time']
-            end_time = stops[num_stations - 1]['departure_time']
+            end_time = stops[num_stations - 1]['arrival_time']
 
         return Response({
             **data,
