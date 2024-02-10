@@ -9,6 +9,10 @@ class TicketPurchase(serializers.Serializer):
 
 
 class PlanQuery(serializers.Serializer):
-    _from = serializers.IntegerField()
-    to = serializers.IntegerField()
-    optimize = serializers.ChoiceField(choices=['cost', 'time'])
+    
+    fields = {
+        'from': serializers.IntegerField(),
+        'to': serializers.IntegerField(),
+        'optimize': serializers.ChoiceField(choices=['cost', 'time']),
+    }
+    
