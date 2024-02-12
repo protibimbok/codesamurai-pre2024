@@ -60,7 +60,9 @@ def purchase_ticket(request):
     # time_after = s['time_after']
    
     stops = Stop.objects.filter(
-        Q(station_id=from_id) | Q(station_id=to_id)
+        train_id__in = Stop.objects.filter(
+            Q(station_id=from_id) | Q(station_id=to_id)
+        )
     ).order_by('train_id', 'stop_id')
 
     edges = []
