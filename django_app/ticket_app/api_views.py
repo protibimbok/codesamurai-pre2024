@@ -1,4 +1,3 @@
-from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -7,194 +6,39 @@ from .serializers import *
 from train_app.models import Stop
 from users_app.models import *
 from station_app.models import *
-from typing import Dict, List, Set, Tuple
 
 from django.db.models import Q
 
-from queue import PriorityQueue
-import datetime
-# Create your tests here.
-from queue import PriorityQueue
 from django.db.models import Q
-import datetime
+import heapq
 
 
-def time_to_minutes(time_str):
-    hours, minutes = map(int, time_str.split(":"))
-    total_minutes = hours * 60 + minutes
-    return total_minutes
-
-
-def dijkstra_for_cheapest_route(station_from, station_to, timeafter):
-    # Initialize distances to all nodes as infinity except the start node
-    station_to = int(station_to)
-    station_from = int(station_from)
-        
-    totaltime = 0
-    totalcost = 0
-    path = []
-
-    costs = {}
-    times = {}
-
-    stations = Station.objects.all()
-    for station in stations:
-        costs[station.station_id] = 10000000000000000000
-        times[station.station_id] = "99:99"
-
-    costs[station_from] = 0
-    times[station_from] = timeafter
-
-    pq = PriorityQueue()
-    pq.put((costs[station_from], times[station_from], station_from, -1))
+def dijkstra(edges, start):
+    # Initialize distances dictionary
+    distances = {vertex: float('infinity') for vertex in set(sum(([edge[0], edge[1]] for edge in edges), []))}
+    distances[start] = 0
     
-    pqpath = []
-
-    while not pq.empty():
-        # Pop the node with the smallest distance from the priority queue
-        current_fare, arr_time, current_station, pathind = pq.get()
-                
-        #print(current_station)
-        #print(station_to)
-        if current_station == station_to:
-            totalcost = current_fare
-            endstop = Stop.objects.get(stop_id = pqpath[pathind][1])
-            endstop = Stop.objects.filter(train_id = endstop.train_id.train_id, 
-                                        arrival_time__gte = endstop.departure_time).order_by('arrival_time').first()
-            path.append(endstop.stop_id)
-            path.append(pqpath[pathind][1])
-            while pqpath[pathind][0] != -1:
-                pathind = pqpath[pathind][0]
-                path.append(pqpath[pathind][1])
-            #path.append(station_from)
-            path.reverse()
-
-            totaltime = time_to_minutes(times[station_to]) - time_to_minutes(Stop.objects.get(stop_id=path[0]).departure_time)
-            break
-        
-        train_stops = Stop.objects.filter(station_id = current_station).filter(~Q(departure_time = None), departure_time__gte = arr_time)
-        
-        print(train_stops)
-        for train_stop in train_stops:
-                
-            #print(train_stop)
-            to_stop = Stop.objects.filter(train_id = train_stop.train_id.train_id, 
-                                          arrival_time__gte = train_stop.departure_time).order_by('arrival_time').first()
-            
-            if to_stop != None and costs[to_stop.station_id.station_id] > current_fare + to_stop.fare:
-                print(to_stop)
-                costs[to_stop.station_id.station_id] = current_fare + to_stop.fare
-                times[to_stop.station_id.station_id] = to_stop.arrival_time
-
-                pq.put((costs[to_stop.station_id.station_id], times[to_stop.station_id.station_id], to_stop.station_id.station_id, len(pqpath)))
-                pqpath.append((pathind, train_stop.stop_id))
-
-    print(path)
-    return (totalcost, totaltime, path)
-
-
-
-def dijkstra_for_shortesttime_route(station_from, station_to, timeafter):
-    # Initialize distances to all nodes as infinity except the start node
-    station_to = int(station_to)
-    station_from = int(station_from)
-        
-    totaltime = 0
-    totalcost = 0
-    path = []
-
-    costs = {}
-    times = {}
-
-    stations = Station.objects.all()
-    for station in stations:
-        costs[station.station_id] = 10000000000000000000
-        times[station.station_id] = 10000000000000000000
-
-    costs[station_from] = 0
-    times[station_from] = 0
-
-    pq = PriorityQueue()
-    pq.put((times[station_from], costs[station_from], timeafter, station_from, -1))
+    # Priority queue to store vertices to visit
+    priority_queue = [(0, start)]
     
-    pqpath = []
-
-    while not pq.empty():
-        # Pop the node with the smallest distance from the priority queue
-        current_time, current_fare, arr_time, current_station, pathind = pq.get()
-                
-        #print(current_station)
-        #print(station_to)
-        if current_station == station_to:
-            totalcost = current_fare
-            
-            endstop = Stop.objects.get(stop_id = pqpath[pathind][1])
-            endstop = Stop.objects.filter(train_id = endstop.train_id.train_id, 
-                                        arrival_time__gte = endstop.departure_time).order_by('arrival_time').first()
-            path.append(endstop.stop_id)
-            path.append(pqpath[pathind][1])
-            while pqpath[pathind][0] != -1:
-                pathind = pqpath[pathind][0]
-                path.append(pqpath[pathind][1])
-            #path.append(station_from)
-            path.reverse()
-
-            totaltime = times[station_to]
-            break
-
-        train_stops = Stop.objects.filter(station_id = current_station).filter(~Q(departure_time = None), departure_time__gte = arr_time)
-
-        print(train_stops)
-        for train_stop in train_stops:
-            to_stop = Stop.objects.filter(train_id = train_stop.train_id.train_id, 
-                                          arrival_time__gte = train_stop.departure_time).order_by('arrival_time').first()
-            
-            to_stop_arr_time = current_time + time_to_minutes(to_stop.arrival_time)
-            if pathind == -1:
-                to_stop_arr_time -= time_to_minutes(train_stop.departure_time)
-            else :
-                to_stop_arr_time -= time_to_minutes(arr_time)
-            print(to_stop_arr_time)
-            if to_stop != None and times[to_stop.station_id.station_id] > to_stop_arr_time:
-                print(to_stop)
-                costs[to_stop.station_id.station_id] = current_fare + to_stop.fare
-                times[to_stop.station_id.station_id] = to_stop_arr_time
-
-                pq.put((times[to_stop.station_id.station_id], costs[to_stop.station_id.station_id], to_stop.arrival_time, to_stop.station_id.station_id, len(pqpath)))
-                pqpath.append((pathind, train_stop.stop_id))
-
-    print(path)
-    return (totalcost, totaltime, path)
-
-
-def plan_optimal_route(station_from, station_to, order_by, timeafter):
-
-    if timeafter != None :
-        return dijkstra_for_cheapest_route(station_from, station_to, timeafter)
-    elif order_by == "cost":
-        return dijkstra_for_cheapest_route(station_from, station_to, "00:00")
-    else:
-        return dijkstra_for_shortesttime_route(station_from, station_to, "00:00")
-
-
-def get_cheapest_path(
-    train_stops: Dict[int, List[Stop]],
-    common_stops: Dict[int, Set[int]],
-    train_station_idx: Dict[str, int],
-    queue: List[Tuple[int, int]],
-):
-    (train_id, from_id) = queue.pop()
-    stops = train_stops[train_id]
-    ts_idx = train_station_idx.get("%d_%d" % (train_id, from_id))
-
-    if ts_idx is not None:
-        this_station = stops[ts_idx]
-        other_trains = common_stops[this_station.station_id]
-        other_trains.remove(train_id)
-
-    if len(queue) > 0:
-        get_cheapest_path(train_stops, common_stops, train_station_idx, queue)
+    while priority_queue:
+        current_distance, current_vertex = heapq.heappop(priority_queue)
         
+        # Ignore the vertex if we have already found a shorter path to it
+        if current_distance > distances[current_vertex]:
+            continue
+        
+        # Check all neighbors of the current vertex
+        for edge in edges:
+            source, target, weight = edge
+            # Update the distance if a shorter path is found
+            if source == current_vertex:
+                new_distance = current_distance + weight
+                if new_distance < distances[target]:
+                    distances[target] = new_distance
+                    heapq.heappush(priority_queue, (new_distance, target))
+    
+    return distances
 
 
 @swagger_auto_schema(
@@ -291,9 +135,20 @@ def purchase_ticket(request):
                 edges.append((last_node, node, stop.fare))
         
     
-    print(edges)
+    from_nodes = station_time_node.get(from_id)
+    to_nodes = station_time_node.get(to_id)
 
-    # get_cheapest_path(to_id, train_routes)
+    if from_nodes is None or to_nodes is None:
+        print("\n\n\n\nNo routes!\n\n\n\n")
+        return Response({
+            'message': 'No routes found'
+        }, status=status.HTTP_404_NOT_FOUND)
+
+    
+    for _, from_node in from_nodes:
+        print("\n\n\n\n\n From: %d" % from_node)
+        print(dijkstra(edges, from_node))
+        
 
     return Response({})
 
@@ -315,7 +170,7 @@ def optimal_plan(request):
     
     reqs = request.GET.dict()
 
-    (total_cost, total_time, stations) = plan_optimal_route(reqs['from'], reqs['to'], reqs['optimize'], None)
+    (total_cost, total_time, stations) = (0, 0, [])
     
     if len(stations) == 0:
         return Response({
