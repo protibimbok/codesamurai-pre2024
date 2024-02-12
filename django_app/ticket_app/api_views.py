@@ -7,7 +7,7 @@ from train_app.models import Stop
 from users_app.models import *
 from station_app.models import *
 
-from django.db.models import Q, Subquery
+from django.db import connection
 
 import heapq
 
@@ -58,18 +58,17 @@ def purchase_ticket(request):
     from_id = s['station_from']
     to_id = s['station_to']
     # time_after = s['time_after']
-   
-    train_ids_subquery = Stop.objects.filter(
-        Q(station_id=from_id) | Q(station_id=to_id)
-    ).values('train_id').distinct()
 
-    # Main query to filter stops based on train_ids from the subquery
-    stops = Stop.objects.filter(train_id__in=Subquery(train_ids_subquery)).order_by('train_id', 'stop_id')
+    stops = []
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT train_id_id, station_id_id, arrival_time, departure_time, fare FROM train_app_stop ORDER BY train_id_id ASC, stop_id ASC")
+        stops = cursor.fetchall()
 
     edges = []
     station_time_node = {}
     node_count = 0
     train_last_node = {}
+    from_to_edge_map = {}
 
 
     """
@@ -83,67 +82,61 @@ def purchase_ticket(request):
     """
 
     for stop in stops:
-        has_arrival = bool(stop.arrival_time)
-        has_departure = bool(stop.departure_time)
-        last_node = train_last_node.get(stop.train_id)
 
-        if not has_arrival and not has_departure:
-            """
-            This stop neither has a arrival time, nor a departure time
-            Therefore we cannot switch train in this node
-            """
-            node_count += 1
-            node = node_count
-            if last_node is not None:
-                edges.append((last_node, node, stop.fare))
-            train_last_node[stop.train_id] = node
-            continue
 
-        station_map = station_time_node.get(stop.station_id)
+        (train_id, station_id, arrival_time, departure_time, fare) = stop
+
+        print("\nt: %d, s: %d, d: %s" % (train_id, station_id, departure_time))
+
+        station_map = station_time_node.get(station_id)
         if station_map is None:
             station_map = {}
-            station_time_node[stop.station_id] = station_map
-
+            station_time_node[station_id] = station_map
+      
+        node = None
+        has_departure = bool(departure_time)
 
         if has_departure:
-            """
-            This stop has a departure time, so we need to create a node
-            for this departure time if it does not already exist.
-            So that the traveller can switch to this train if it fits
-            """
-            node = station_map.get(stop.departure_time)
-            if node is None:
-                node_count += 1
-                node = node_count
-                station_map[stop.departure_time] = node
-        else:
+            node = station_map.get(departure_time)
+
+        if node is None and has_departure:
             node_count += 1
             node = node_count
-            if last_node is not None:
-                """
-                We need to add this to edges list,
-                becasue it won't get added in the station_map loop
-                """
-                edges.append((last_node, node, stop.fare))
+            station_map[departure_time] = node
+        
+        
+        last_node = train_last_node.get(train_id)
+        train_last_node[train_id] = node
 
-        train_last_node[stop.train_id] = node
         if last_node is None:
+            """
+            This is the beginning of journey for this train,
+            so we don't need to create a path with anything
+            """
             continue
-            
-            
-        max_delay = stop.arrival_time if has_arrival else stop.departure_time
+        
         
         for time in station_map:
-            if time >= max_delay:
-                edges.append((last_node, station_map[time], stop.fare))
+            print("cmp: %s >= %s", time, arrival_time)
+            if time >= arrival_time:
+                print("True\n")
+                node = station_map[time]
+                ft_kv = "%d_%d" % (last_node, node)
+                edge_idx = from_to_edge_map.get(ft_kv)
+                if edge_idx is None:
+                    from_to_edge_map[ft_kv] = len(edges)
+                    edges.append((last_node, node, fare))
+                elif edges[edge_idx][2] > fare:
+                    edges[edge_idx][2] = fare
     
     print("\n\n\n\nEdges:")
     print(edges)
+    print("\n\n\nMap:")
+    print(station_time_node)
     from_nodes = station_time_node.get(from_id)
     to_nodes = station_time_node.get(to_id)
 
     if from_nodes is None or to_nodes is None:
-        print("\n\n\n\nNo routes!\n\n\n\n")
         return Response({
             'message': 'No routes found'
         }, status=status.HTTP_404_NOT_FOUND)
