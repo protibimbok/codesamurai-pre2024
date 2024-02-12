@@ -81,12 +81,17 @@ def purchase_ticket(request):
        in the next iteration as last_stop of this train will be this one
     """
 
+
     for stop in stops:
 
 
         (train_id, station_id, arrival_time, departure_time, fare) = stop
 
-        print("\nt: %d, s: %d, d: %s" % (train_id, station_id, departure_time))
+        if not bool(departure_time):
+            last_node = train_last_node.get(train_id)
+            if last_node is not None:
+                edges.append((last_node, 0, fare))
+            continue
 
         station_map = station_time_node.get(station_id)
         if station_map is None:
@@ -94,12 +99,10 @@ def purchase_ticket(request):
             station_time_node[station_id] = station_map
       
         node = None
-        has_departure = bool(departure_time)
+        
+        node = station_map.get(departure_time)
 
-        if has_departure:
-            node = station_map.get(departure_time)
-
-        if node is None and has_departure:
+        if node is None:
             node_count += 1
             node = node_count
             station_map[departure_time] = node
@@ -117,9 +120,7 @@ def purchase_ticket(request):
         
         
         for time in station_map:
-            print("cmp: %s >= %s", time, arrival_time)
             if time >= arrival_time:
-                print("True\n")
                 node = station_map[time]
                 ft_kv = "%d_%d" % (last_node, node)
                 edge_idx = from_to_edge_map.get(ft_kv)
@@ -129,26 +130,23 @@ def purchase_ticket(request):
                 elif edges[edge_idx][2] > fare:
                     edges[edge_idx][2] = fare
     
-    print("\n\n\n\nEdges:")
-    print(edges)
-    print("\n\n\nMap:")
-    print(station_time_node)
     from_nodes = station_time_node.get(from_id)
-    to_nodes = station_time_node.get(to_id)
 
-    if from_nodes is None or to_nodes is None:
+    if from_nodes is None:
         return Response({
             'message': 'No routes found'
         }, status=status.HTTP_404_NOT_FOUND)
 
-    
+    lowest = float('infinity')
     for k  in from_nodes:
         from_node = from_nodes[k]
-        print("\n\n\n\n\n From: %d" % from_node)
-        print(dijkstra(edges, from_node))
-        
+        cost = dijkstra(edges, from_node)[0]
+        if cost < lowest:
+            lowest = cost
 
-    return Response({})
+    return Response({
+        'cost': lowest
+    })
 
     
     
