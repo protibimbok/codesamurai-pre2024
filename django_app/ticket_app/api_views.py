@@ -7,13 +7,12 @@ from .serializers import *
 from train_app.models import Stop
 from users_app.models import *
 from station_app.models import *
-# Create your tests here.
+from typing import Dict, List, Set, Tuple
+
+from django.db.models import Q
+
 from queue import PriorityQueue
 import datetime
-from django.test import TestCase
-from train_app.models import *
-from users_app.models import *
-from station_app.models import *
 # Create your tests here.
 from queue import PriorityQueue
 from django.db.models import Q
@@ -178,6 +177,24 @@ def plan_optimal_route(station_from, station_to, order_by, timeafter):
         return dijkstra_for_shortesttime_route(station_from, station_to, "00:00")
 
 
+def get_cheapest_path(
+    train_stops: Dict[int, List[Stop]],
+    common_stops: Dict[int, Set[int]],
+    train_station_idx: Dict[str, int],
+    queue: List[Tuple[int, int]],
+):
+    (train_id, from_id) = queue.pop()
+    stops = train_stops[train_id]
+    ts_idx = train_station_idx.get("%d_%d" % (train_id, from_id))
+
+    if ts_idx is not None:
+        this_station = stops[ts_idx]
+        other_trains = common_stops[this_station.station_id]
+        other_trains.remove(train_id)
+
+    if len(queue) > 0:
+        get_cheapest_path(train_stops, common_stops, train_station_idx, queue)
+        
 
 
 @swagger_auto_schema(
@@ -194,8 +211,91 @@ def purchase_ticket(request):
     serializer = TicketPurchase(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    s = serializer.data
+    from_id = s['station_from']
+    to_id = s['station_to']
+    # time_after = s['time_after']
+   
+    stops = Stop.objects.filter(
+        Q(station_id=from_id) | Q(station_id=to_id)
+    ).order_by('train_id', 'stop_id')
+
+    edges = []
+    station_time_node = {}
+    node_count = 0
+    train_last_node = {}
+
+
+    """
+    Every unique combination of station & departure time of a train resembles a node here.
+
+    In this algorithm, we go to a station by a train. Then:
+    1. Get/create a node with the departure time of this train.
+    2. Add a path to all departure times that's >= this train's
+    3. A path from this station to the next station will be added 
+       in the next iteration as last_stop of this train will be this one
+    """
+
+    for stop in stops:
+        has_arrival = bool(stop.arrival_time)
+        has_departure = bool(stop.departure_time)
+        last_node = train_last_node.get(stop.train_id)
+
+        if not has_arrival and not has_departure:
+            """
+            This stop neither has a arrival time, nor a departure time
+            Therefore we cannot switch train in this node
+            """
+            node_count += 1
+            node = node_count
+            if last_node is not None:
+                edges.append((last_node, node, stop.fare))
+            train_last_node[stop.train_id] = node
+            continue
+
+        station_map = station_time_node.get(stop.station_id)
+        if station_map is None:
+            station_map = {}
+            station_time_node[stop.station_id] = station_map
+
+
+        if has_departure:
+            """
+            This stop has a departure time, so we need to create a node
+            for this departure time if it does not already exist.
+            So that the traveller can switch to this train if it fits
+            """
+            node = station_map.get(stop.departure_time)
+            if node is None:
+                node_count += 1
+                node = node_count
+                station_map[stop.departure_time] = node
+        else:
+            node_count += 1
+            node = node_count
+            if last_node is not None:
+                """
+                We need to add this to edges list,
+                becasue it won't get added in the station_map loop
+                """
+                edges.append((last_node, node, stop.fare))
+
+        train_last_node[stop.train_id] = node
+        if last_node is None:
+            continue
+            
+            
+        max_delay = stop.arrival_time if has_arrival else stop.departure_time
+        for time, node in station_map:
+            if time >= max_delay:
+                edges.append((last_node, node, stop.fare))
+        
     
-    (total_cost, total_time, stations) = plan_optimal_route(serializer.station_from, serializer.station_to, "cost", serializer.time_after)
+    print(edges)
+
+    # get_cheapest_path(to_id, train_routes)
+
+    return Response({})
 
     
     
