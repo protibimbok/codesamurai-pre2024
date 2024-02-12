@@ -9,7 +9,6 @@ from station_app.models import *
 
 from django.db.models import Q
 
-from django.db.models import Q
 import heapq
 
 
