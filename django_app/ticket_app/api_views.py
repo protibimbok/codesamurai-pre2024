@@ -72,6 +72,7 @@ def purchase_ticket(request):
     from_to_edge_map = {}
 
 
+
     """
     Every unique combination of station & departure time of a train resembles a node here.
 
@@ -82,6 +83,21 @@ def purchase_ticket(request):
        in the next iteration as last_stop of this train will be this one
     """
 
+    for stop in stops:
+        station_id = stop[1]
+        departure_time = stop[3]
+        station_map = station_time_node.get(station_id)
+        if station_map is None:
+            station_map = {}
+            station_time_node[station_id] = station_map
+        if not bool(departure_time):
+            continue
+        node = station_map.get(departure_time)
+        if node is None:
+            node_count += 1
+            node = node_count
+            station_map[departure_time] = node
+        
 
     for stop in stops:
 
@@ -96,20 +112,14 @@ def purchase_ticket(request):
                 del train_last_node[train_id]
             continue
 
-        station_map = station_time_node.get(station_id)
 
-        if station_map is None:
-            station_map = {}
-            station_time_node[station_id] = station_map
-      
+        station_map = station_time_node[station_id]
         if bool(departure_time):
-            node = station_map.get(departure_time)
-            if node is None:
-                node_count += 1
-                node = node_count
-                station_map[departure_time] = node
+            node = station_map[departure_time]
             train_last_node[train_id] = node
 
+
+        
         if last_node is None:
             """
             This is the beginning of journey for this train,
