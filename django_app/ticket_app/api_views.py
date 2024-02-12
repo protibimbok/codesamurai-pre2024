@@ -7,7 +7,7 @@ from train_app.models import Stop
 from users_app.models import *
 from station_app.models import *
 
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q, Subquery
 
 import heapq
 
@@ -60,9 +60,8 @@ def purchase_ticket(request):
     # time_after = s['time_after']
    
     stops = Stop.objects.filter(
-        train_id__in = Stop.objects.filter(
-            Q(station_id=from_id) | Q(station_id=to_id)
-        ).values_list('train_id', flat = True).distinct()
+        Q(station_id=from_id) |
+        Exists(Stop.objects.filter(train_id = OuterRef('train_id')).filter(station_id=to_id))
     ).order_by('train_id', 'stop_id')
 
     edges = []
