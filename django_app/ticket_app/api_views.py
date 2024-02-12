@@ -134,8 +134,9 @@ def purchase_ticket(request):
         for time in station_map:
             if time >= max_delay:
                 edges.append((last_node, station_map[time], stop.fare))
-        
     
+    print("\n\n\n\nEdges:")
+    print(edges)
     from_nodes = station_time_node.get(from_id)
     to_nodes = station_time_node.get(to_id)
 
