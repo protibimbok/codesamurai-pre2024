@@ -62,7 +62,7 @@ def purchase_ticket(request):
     stops = Stop.objects.filter(
         train_id__in = Stop.objects.filter(
             Q(station_id=from_id) | Q(station_id=to_id)
-        )
+        ).values_list('train_id', flat = True).distinct()
     ).order_by('train_id', 'stop_id')
 
     edges = []
@@ -131,9 +131,10 @@ def purchase_ticket(request):
             
             
         max_delay = stop.arrival_time if has_arrival else stop.departure_time
-        for time, node in station_map:
+        
+        for time in station_map:
             if time >= max_delay:
-                edges.append((last_node, node, stop.fare))
+                edges.append((last_node, station_map[time], stop.fare))
         
     
     from_nodes = station_time_node.get(from_id)
@@ -146,7 +147,8 @@ def purchase_ticket(request):
         }, status=status.HTTP_404_NOT_FOUND)
 
     
-    for _, from_node in from_nodes:
+    for k  in from_nodes:
+        from_node = from_nodes[k]
         print("\n\n\n\n\n From: %d" % from_node)
         print(dijkstra(edges, from_node))
         
