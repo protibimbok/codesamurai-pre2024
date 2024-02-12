@@ -13,33 +13,32 @@ import heapq
 
 
 def dijkstra(edges, start, end):
-    graph = {}
-    for frm, to, cost in edges:
-        if frm not in graph:
-            graph[frm] = []
-        if to not in graph:
-            graph[to] = []
-        graph[frm].append((to, cost))
-        graph[to].append((frm, cost))  # Assuming undirected graph
-
-    pq = [(0, start, [])]
-    visited = set()
-
-    while pq:
-        (cost, node, path) = heapq.heappop(pq)
-
-        if node not in visited:
-            visited.add(node)
-            path = path + [node]
-
-            if node == end:
-                return cost, path
-
-            for neighbor, c in graph[node]:
-                if neighbor not in visited:
-                    heapq.heappush(pq, (cost + c, neighbor, path))
-
-    return float('inf'), None
+    # Initialize distances dictionary
+    distances = {vertex: float('infinity') for vertex in set(sum(([edge[0], edge[1]] for edge in edges), []))}
+    distances[start] = 0
+    
+    # Priority queue to store vertices to visit
+    priority_queue = [(0, start)]
+    
+    while priority_queue:
+        current_distance, current_vertex = heapq.heappop(priority_queue)
+        
+        # Ignore the vertex if we have already found a shorter path to it
+        if current_distance > distances[current_vertex]:
+            continue
+        
+        # Check all neighbors of the current vertex
+        for edge in edges:
+            source, target, weight = edge
+            # Update the distance if a shorter path is found
+            if source == current_vertex:
+                new_distance = current_distance + weight
+                if new_distance < distances[target]:
+                    distances[target] = new_distance
+                    heapq.heappush(priority_queue, (new_distance, target))
+    if end in distances:
+        return distances[end]
+    return None
 
 
 @swagger_auto_schema(
@@ -71,7 +70,6 @@ def purchase_ticket(request):
     node_count = 0
     train_last_node = {}
     from_to_edge_map = {}
-    node_station_map = {}
 
 
     """
@@ -93,11 +91,10 @@ def purchase_ticket(request):
         last_node = train_last_node.get(train_id)
 
         if station_id == to_id:
-            node_station_map[0] = stop
             if last_node is not None:
                 edges.append((last_node, 0, fare))
                 del train_last_node[train_id]
-                continue
+            continue
 
         station_map = station_time_node.get(station_id)
 
@@ -110,7 +107,6 @@ def purchase_ticket(request):
             if node is None:
                 node_count += 1
                 node = node_count
-                node_station_map[node] = stop
                 station_map[departure_time] = node
             train_last_node[train_id] = node
 
@@ -132,6 +128,7 @@ def purchase_ticket(request):
                     edges.append((last_node, node, fare))
                 elif edges[edge_idx][2] > fare:
                     edges[edge_idx][2] = fare
+                    
     
     from_nodes = station_time_node.get(from_id)
 
@@ -144,24 +141,14 @@ def purchase_ticket(request):
     lpath = []
     for k  in from_nodes:
         from_node = from_nodes[k]
-        cost, node_seq = dijkstra(edges, from_node, 0)
-        if cost < lowest:
+        cost = dijkstra(edges, from_node, 0)
+        if cost is not None and cost < lowest:
             lowest = cost
-            lpath = node_seq
     
-    lpath_d = []
-    for node in lpath:
-        (train_id, station_id, arrival_time, departure_time, fare) = node_station_map[node]
-        lpath_d.append({
-            'station_id': station_id,
-            'train_id': train_id,
-            'departure_time': departure_time,
-            'arrival_time': arrival_time
-        })
-
+   
     return Response({
         'cost': lowest,
-        'stations': lpath_d
+        'stations': lpath
     })
 
     
