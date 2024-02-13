@@ -1,3 +1,4 @@
+from typing import Dict, List, Tuple
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -11,10 +12,32 @@ from django.db import connection
 
 import heapq
 
+class Node:
+    value: int
+    paths: Dict[int, int]
+    info: Dict[str, str]
 
-def dijkstra(edges, start, end):
-    # Initialize distances dictionary
-    distances = {vertex: float('infinity') for vertex in set(sum(([edge[0], edge[1]] for edge in edges), []))}
+    def __init__(self, value: int, stop: Tuple) -> None:
+        self.value = value
+        self.paths = {}
+        self.info = {
+            "station_id": stop[1],
+            "train_id": stop[0],
+            "departure_time": stop[3],
+            "arrival_time": stop[2],
+        }
+    
+    def add_path(self, to: int, weigth: int, stop: Tuple):
+        oldw = self.paths.get(to)
+        if oldw is None or oldw > weigth:
+            self.paths[to] = weigth
+            self.info["train_id"] = stop[0]
+            self.info["arrival_time"] = stop[2]
+
+def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, List[int]]:
+    # Initialize distances dictionary and predecessors dictionary
+    distances = {vertex: float('infinity') for vertex in graph}
+    predecessors = {vertex: None for vertex in graph}
     distances[start] = 0
     
     # Priority queue to store vertices to visit
@@ -27,18 +50,29 @@ def dijkstra(edges, start, end):
         if current_distance > distances[current_vertex]:
             continue
         
+        edges = graph[current_vertex].paths
         # Check all neighbors of the current vertex
-        for edge in edges:
-            source, target, weight = edge
-            # Update the distance if a shorter path is found
-            if source == current_vertex:
-                new_distance = current_distance + weight
-                if new_distance < distances[target]:
-                    distances[target] = new_distance
-                    heapq.heappush(priority_queue, (new_distance, target))
+        for target in edges:
+            weight = edges[target]
+            new_distance = current_distance + weight
+            if new_distance < distances[target]:
+                distances[target] = new_distance
+                predecessors[target] = current_vertex
+                heapq.heappush(priority_queue, (new_distance, target))
+    
+    # Reconstruct the shortest path
+    shortest_path = []
+    current_vertex = end
+    while predecessors[current_vertex] is not None:
+        shortest_path.insert(0, graph[current_vertex].info)
+        current_vertex = predecessors[current_vertex]
+    graph[start].info["arrival_time"] = None
+    shortest_path.insert(0, graph[start].info)
+    
+    print(shortest_path)
     if end in distances:
-        return distances[end]
-    return None
+        return distances[end], shortest_path
+    return None, []
 
 
 @swagger_auto_schema(
@@ -62,16 +96,12 @@ def purchase_ticket(request):
 
     stops = []
     with connection.cursor() as cursor:
-        cursor.execute("SELECT train_id_id, station_id_id, arrival_time, departure_time, fare FROM train_app_stop ORDER BY train_id_id ASC, stop_id ASC")
+        cursor.execute("SELECT train_id_id, station_id_id, arrival_time, departure_time, fare FROM train_app_stop")
         stops = cursor.fetchall()
 
-    edges = []
-    station_time_node = {}
-    node_count = 0
-    train_last_node = {}
-    from_to_edge_map = {}
 
-
+    STARTING_NODE_VAL = 0
+    ENDING_NODE_VAL = 1
 
     """
     Every unique combination of station & departure time of a train resembles a node here.
@@ -82,10 +112,23 @@ def purchase_ticket(request):
     3. A path from this station to the next station will be added 
        in the next iteration as last_stop of this train will be this one
     """
+    graph = {}
+    station_time_node = {}
+    node_count = 1
 
+    """
+    We need this first loop to assign the nodes(departure) to each station first,
+    for a train may appear later in the loop but has arrival time that's early
+    """
     for stop in stops:
         station_id = stop[1]
-        if station_id == from_id or station_id == to_id:
+        if station_id == from_id:
+            if STARTING_NODE_VAL not in graph:
+                graph[STARTING_NODE_VAL] = Node(STARTING_NODE_VAL, stop)
+            continue
+        if station_id == to_id:
+            if ENDING_NODE_VAL not in graph:
+                graph[ENDING_NODE_VAL] = Node(ENDING_NODE_VAL, stop)
             continue
         departure_time = stop[3]
         station_map = station_time_node.get(station_id)
@@ -97,9 +140,12 @@ def purchase_ticket(request):
         node = station_map.get(departure_time)
         if node is None:
             node_count += 1
-            node = node_count
+            node = Node(node_count, stop)
             station_map[departure_time] = node
+            graph[node_count] = node
         
+
+    train_last_node = {}
 
     for stop in stops:
 
@@ -107,7 +153,7 @@ def purchase_ticket(request):
         (train_id, station_id, arrival_time, departure_time, fare) = stop
 
         if station_id == from_id:
-            train_last_node[train_id] = 'a'
+            train_last_node[train_id] = graph[STARTING_NODE_VAL]
             continue
             
 
@@ -115,7 +161,7 @@ def purchase_ticket(request):
 
         if station_id == to_id:
             if last_node is not None:
-                edges.append((last_node, 'z', fare))
+                last_node.add_path(ENDING_NODE_VAL, fare, stop)
                 del train_last_node[train_id]
             continue
 
@@ -128,34 +174,29 @@ def purchase_ticket(request):
 
         
         if last_node is None:
-            """
-            This is the beginning of journey for this train,
-            so we don't need to create a path with anything
-            """
             continue
         
         
         for time in station_map:
             if time >= arrival_time:
-                node = station_map[time]
-                ft_kv = "%s_%s" % (last_node, node)
-                edge_idx = from_to_edge_map.get(ft_kv)
-                if edge_idx is None:
-                    from_to_edge_map[ft_kv] = len(edges)
-                    edges.append((last_node, node, fare))
-                elif edges[edge_idx][2] > fare:
-                    edges[edge_idx] = (last_node, node, fare)
+                node: Node = station_map[time]
+                last_node.add_path(node.value, fare, stop)
                     
-    
-    print("\\nEdges:\n")
-    for edge in edges:
-        print("%s %s %d" % edge)
-    cost = dijkstra(edges, 'a', 'z')
-    
+
+    # print("\n\n\nGraph:\n")
+    # for node_val in graph:
+    #     print("%d\t%s\n" % (node_val, json.dumps(graph[node_val].paths, indent=2)))
+                
+    (cost, lpath) = dijkstra(graph, STARTING_NODE_VAL, ENDING_NODE_VAL)
+
+    if cost is None:
+        return Response({
+            "message": "no ticket available for station: %d to station:%d" % (from_id, to_id)
+        }, status=status.HTTP_403_FORBIDDEN)
    
     return Response({
         'cost': cost,
-        'stations': []
+        'stations': lpath
     })
 
     
