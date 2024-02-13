@@ -9,6 +9,7 @@ from train_app.models import Stop
 from users_app.models import *
 from station_app.models import *
 from .algo.purchase_ticket import purchase_ticket_main
+from .algo.optimal_path import optimal_cost_path, optimal_time_path
 
 
 @swagger_auto_schema(
@@ -87,30 +88,19 @@ def optimal_plan(request):
     
     reqs = request.GET.dict()
 
+    from_id = reqs.get('from')
+    to_id = reqs.get('to')
+    optimize = reqs.get('optimize')
+
     (total_cost, total_time, stations) = (0, 0, [])
     
-    if len(stations) == 0:
-        return Response({
-            "message": "no routes available from station: %s to station: %s" % (reqs['from'], reqs['to'])
-        }, status = status.HTTP_403_FORBIDDEN)
-    
-    custom_order = ['station_id', 'train_id', 'departure_time', 'arrival_time']
-
-    station_data = []
-    for id in stations:
-        stobj = Stop.objects.get(pk = id)
-        if stations[0] == id:
-            stobj.arrival_time = None
-        if stations[len(stations)-1] == id:
-            stobj.departure_time = None
-
-        my_dict = {field: getattr(stobj, field) for field in custom_order}
-        my_dict['station_id'] = stobj.station_id_id
-        my_dict['train_id'] = stobj.train_id_id
-        station_data.append(my_dict)
+    if optimize is not None and optimize == 'cost':
+        optimal_cost_path(from_id, to_id)
+    else:
+        optimal_time_path(from_id, to_id)
 
     return Response({
         'total_cost': total_cost,
         'total_time': total_time,
-        'stations': station_data
+        'stations': stations
     })
