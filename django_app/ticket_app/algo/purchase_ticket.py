@@ -9,10 +9,10 @@ def purchase_ticket_main(from_id: int, to_id: int, time_after: str) -> Tuple[int
             """
             SELECT train_id_id, station_id_id, arrival_time, departure_time, fare
             FROM train_app_stop
-            WHERE time_after >= %s
+            WHERE arrival_time >= %s OR departure_time >= %s
             ORDER BY stop_id ASC
             """,
-            [time_after]
+            [time_after, time_after]
         )
         stops = cursor.fetchall()
 
