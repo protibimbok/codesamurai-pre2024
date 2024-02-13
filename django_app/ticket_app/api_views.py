@@ -5,7 +5,6 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import *
 from .models import Ticket
-from train_app.models import Stop
 from users_app.models import *
 from station_app.models import *
 from .algo.purchase_ticket import purchase_ticket_main
@@ -88,19 +87,19 @@ def optimal_plan(request):
     
     reqs = request.GET.dict()
 
-    from_id = reqs.get('from')
-    to_id = reqs.get('to')
+    from_id = int(reqs.get('from', 0))
+    to_id = int(reqs.get('to', 0))
     optimize = reqs.get('optimize')
 
     (total_cost, total_time, stations) = (0, 0, [])
     
     if optimize is not None and optimize == 'cost':
-        optimal_cost_path(from_id, to_id)
+        total_cost, lpath = optimal_cost_path(from_id, to_id)
     else:
-        optimal_time_path(from_id, to_id)
+        total_time, lpath = optimal_time_path(from_id, to_id)
 
     return Response({
         'total_cost': total_cost,
         'total_time': total_time,
-        'stations': stations
+        'stations': lpath
     })

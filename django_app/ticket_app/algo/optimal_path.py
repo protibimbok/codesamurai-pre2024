@@ -1,29 +1,43 @@
 from typing import Dict, List, Tuple
 from django.db import connection
 
-import heapq
+import heapq, json
 
 class Node:
     value: int
     paths: Dict[int, int]
-    info: Dict[str, str]
+    station_id: int
+    train_id: int
+    departure_time: str
+    departure_minute: int
+    arrival_time: str
+    arrival_minute: int
 
-    def __init__(self, value: int, stop: Tuple) -> None:
+    def __init__(
+        self,
+        value: int,
+        station_id: int,
+        train_id: int,
+        departure_time: str,
+        departure_minute: int,
+        arrival_time: str,
+        arrival_minute: int,
+    ) -> None:
         self.value = value
         self.paths = {}
-        self.info = {
-            "station_id": stop[1],
-            "train_id": stop[0],
-            "departure_time": stop[3],
-            "arrival_time": stop[2],
-        }
+        self.station_id = station_id
+        self.train_id = train_id
+        self.departure_time = departure_time
+        self.departure_minute = departure_minute
+        self.arrival_time = arrival_time
+        self.arrival_minute = arrival_minute
+        
     
-    def add_path(self, to: int, weigth: int, stop: Tuple):
+    def add_path(self, to: int, weigth: int):
         oldw = self.paths.get(to)
         if oldw is None or oldw > weigth:
             self.paths[to] = weigth
-            self.info["train_id"] = stop[0]
-            self.info["arrival_time"] = stop[2]
+            
 
 def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, List[int]]:
     # Initialize distances dictionary and predecessors dictionary
@@ -51,16 +65,21 @@ def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, List[in
                 predecessors[target] = current_vertex
                 heapq.heappush(priority_queue, (new_distance, target))
     
-    # Reconstruct the shortest path
+    
     shortest_path = []
     current_vertex = end
     while predecessors[current_vertex] is not None:
-        shortest_path.insert(0, graph[current_vertex].info)
+        node = graph[current_vertex]
+        shortest_path.insert(0, {
+            'station_id': node.station_id
+        })
         current_vertex = predecessors[current_vertex]
-    graph[start].info["arrival_time"] = None
-    shortest_path.insert(0, graph[start].info)
     
-    print(shortest_path)
+    node = graph[start]
+    shortest_path.insert(0, {
+        'station_id': node.station_id
+    })
+    
     if end in distances:
         return distances[end], shortest_path
     return None, []
@@ -92,18 +111,37 @@ def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict, Dict]:
     node_count = 1
 
     for stop in stops:
+        print(stop)
         (train_id, station_id, arrival_time, departure_time, fare) = stop
         dep_time = None if not bool(departure_time) else time_to_minutes(departure_time)
         arr_time = None if not bool(arrival_time) else time_to_minutes(arrival_time)
-        stops2.append(train_id, station_id, arrival_time, departure_time, fare, arr_time, dep_time)
+        stops2.append((train_id, station_id, arrival_time, departure_time, fare, arr_time, dep_time))
 
         if station_id == from_id:
+            print("Ok strat")
             if STARTING_NODE_VAL not in graph:
-                graph[STARTING_NODE_VAL] = Node(STARTING_NODE_VAL, stop)
+                graph[STARTING_NODE_VAL] = Node(
+                    STARTING_NODE_VAL,
+                    station_id=station_id,
+                    train_id=train_id,
+                    departure_time=departure_time,
+                    departure_minute=dep_time,
+                    arrival_time=arrival_time,
+                    arrival_minute=arr_time
+                )
             continue
         if station_id == to_id:
+            print("Ok End")
             if ENDING_NODE_VAL not in graph:
-                graph[ENDING_NODE_VAL] = Node(ENDING_NODE_VAL, stop)
+                graph[ENDING_NODE_VAL] = Node(
+                    ENDING_NODE_VAL,
+                    station_id=station_id,
+                    train_id=train_id,
+                    departure_time=departure_time,
+                    departure_minute=dep_time,
+                    arrival_time=arrival_time,
+                    arrival_minute=arr_time
+                )
             continue
         departure_time = stop[3]
         station_map = station_time_node.get(station_id)
@@ -115,7 +153,15 @@ def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict, Dict]:
         node = station_map.get(departure_time)
         if node is None:
             node_count += 1
-            node = Node(node_count, stop)
+            node = Node(
+                node_count,
+                station_id=station_id,
+                train_id=train_id,
+                departure_time=departure_time,
+                departure_minute=dep_time,
+                arrival_time=arrival_time,
+                arrival_minute=arr_time
+            )
             station_map[departure_time] = node
             graph[node_count] = node
     
@@ -139,7 +185,7 @@ def optimal_cost_path(from_id: int, to_id: int):
 
         if station_id == to_id:
             if last_node is not None:
-                last_node.add_path(ENDING_NODE_VAL, fare, stop)
+                last_node.add_path(ENDING_NODE_VAL, fare)
                 del train_last_node[train_id]
             continue
 
@@ -158,13 +204,12 @@ def optimal_cost_path(from_id: int, to_id: int):
         for time in station_map:
             if time >= arrival_time:
                 node: Node = station_map[time]
-                last_node.add_path(node.value, fare, stop)
+                last_node.add_path(node.value, fare)
                     
-
     # print("\n\n\nGraph:\n")
     # for node_val in graph:
     #     print("%d\t%s\n" % (node_val, json.dumps(graph[node_val].paths, indent=2)))
-                
+
     if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
         return None, []
     
@@ -173,12 +218,11 @@ def optimal_cost_path(from_id: int, to_id: int):
 
 def optimal_time_path(from_id: int, to_id: int):
     stops, graph, station_time_node = prepare_stops(from_id, to_id)
-    train_last_node = {}
+    train_last_node: Dict[int, Node] = {}
 
     for stop in stops:
 
-        (train_id, station_id, arrival_time, departure_time, fare, _, _) = stop
-
+        (train_id, station_id, arrival_time, departure_time, _, arrival_minute, _) = stop
         if station_id == from_id:
             train_last_node[train_id] = graph[STARTING_NODE_VAL]
             continue
@@ -188,7 +232,7 @@ def optimal_time_path(from_id: int, to_id: int):
 
         if station_id == to_id:
             if last_node is not None:
-                last_node.add_path(ENDING_NODE_VAL, fare, stop)
+                last_node.add_path(ENDING_NODE_VAL, arrival_minute - last_node.departure_minute)
                 del train_last_node[train_id]
             continue
 
@@ -203,17 +247,15 @@ def optimal_time_path(from_id: int, to_id: int):
         if last_node is None:
             continue
         
-        
         for time in station_map:
             if time >= arrival_time:
                 node: Node = station_map[time]
-                last_node.add_path(node.value, fare, stop)
+                last_node.add_path(node.value, node.departure_minute - last_node.departure_minute)
                     
-
     # print("\n\n\nGraph:\n")
     # for node_val in graph:
     #     print("%d\t%s\n" % (node_val, json.dumps(graph[node_val].paths, indent=2)))
-                
+
     if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
         return None, []
     
