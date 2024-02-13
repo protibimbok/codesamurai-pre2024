@@ -85,6 +85,8 @@ def purchase_ticket(request):
 
     for stop in stops:
         station_id = stop[1]
+        if station_id == from_id or station_id == to_id:
+            continue
         departure_time = stop[3]
         station_map = station_time_node.get(station_id)
         if station_map is None:
@@ -104,11 +106,16 @@ def purchase_ticket(request):
 
         (train_id, station_id, arrival_time, departure_time, fare) = stop
 
+        if station_id == from_id:
+            train_last_node[train_id] = 'a'
+            continue
+            
+
         last_node = train_last_node.get(train_id)
 
         if station_id == to_id:
             if last_node is not None:
-                edges.append((last_node, 0, fare))
+                edges.append((last_node, 'z', fare))
                 del train_last_node[train_id]
             continue
 
@@ -131,34 +138,24 @@ def purchase_ticket(request):
         for time in station_map:
             if time >= arrival_time:
                 node = station_map[time]
-                ft_kv = "%d_%d" % (last_node, node)
+                ft_kv = "%s_%s" % (last_node, node)
                 edge_idx = from_to_edge_map.get(ft_kv)
                 if edge_idx is None:
                     from_to_edge_map[ft_kv] = len(edges)
                     edges.append((last_node, node, fare))
                 elif edges[edge_idx][2] > fare:
-                    edges[edge_idx][2] = fare
+                    edges[edge_idx] = (last_node, node, fare)
                     
     
-    from_nodes = station_time_node.get(from_id)
-
-    if from_nodes is None:
-        return Response({
-            'message': 'No routes found'
-        }, status=status.HTTP_404_NOT_FOUND)
-
-    lowest = float('infinity')
-    lpath = []
-    for k  in from_nodes:
-        from_node = from_nodes[k]
-        cost = dijkstra(edges, from_node, 0)
-        if cost is not None and cost < lowest:
-            lowest = cost
+    print("\\nEdges:\n")
+    for edge in edges:
+        print("%s %s %d" % edge)
+    cost = dijkstra(edges, 'a', 'z')
     
    
     return Response({
-        'cost': lowest,
-        'stations': lpath
+        'cost': cost,
+        'stations': []
     })
 
     
