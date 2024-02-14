@@ -90,13 +90,11 @@ def optimal_plan(request):
     from_id = int(reqs.get('from', 0))
     to_id = int(reqs.get('to', 0))
     optimize = reqs.get('optimize')
-
-    (total_cost, total_time, stations) = (0, 0, [])
     
     if optimize is not None and optimize == 'cost':
-        total_cost, lpath = optimal_cost_path(from_id, to_id)
+        total_time, total_cost, lpath = optimal_cost_path(from_id, to_id)
     else:
-        total_time, lpath = optimal_time_path(from_id, to_id)
+        total_time, total_cost, lpath = optimal_time_path(from_id, to_id)
 
     return Response({
         'total_cost': total_cost,

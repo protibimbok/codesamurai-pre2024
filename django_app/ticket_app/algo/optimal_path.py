@@ -1,45 +1,64 @@
 from typing import Dict, List, Tuple
 from django.db import connection
 
-import heapq, json
+import heapq
+
+class Edge:
+    fare: int
+    duration: int
+    cost: int
+
+    def __init__(
+        self,
+        fare: int,
+        duration: int,
+        cost: int
+    ):
+        self.fare = fare
+        self.duration = duration
+        self.cost = cost
+
+        
 
 class Node:
     value: int
-    paths: Dict[int, int]
     station_id: int
-    train_id: int
-    departure_time: str
-    departure_minute: int
-    arrival_time: str
-    arrival_minute: int
+    dep_time: int
+    edges: Dict[int, Edge]
+    info: Dict[str, str]
 
     def __init__(
         self,
         value: int,
         station_id: int,
-        train_id: int,
-        departure_time: str,
-        departure_minute: int,
-        arrival_time: str,
-        arrival_minute: int,
-    ) -> None:
+        dep_time: int,
+        departure: str,
+        arrival: str,
+        train_id: int
+    ):
         self.value = value
-        self.paths = {}
         self.station_id = station_id
-        self.train_id = train_id
-        self.departure_time = departure_time
-        self.departure_minute = departure_minute
-        self.arrival_time = arrival_time
-        self.arrival_minute = arrival_minute
-        
-    
-    def add_path(self, to: int, weigth: int):
-        oldw = self.paths.get(to)
-        if oldw is None or oldw > weigth:
-            self.paths[to] = weigth
+        self.dep_time = dep_time
+        self.edges = {}
+
+        self.info = {
+            "station_id": station_id,
+            "train_id": train_id,
+            "departure_time": departure,
+            "arrival_time": arrival,
+        }
+
+    def add_edge(
+        self,
+        to,
+        fare: int,
+        duration: int,
+        cost: int
+    ):
+        self.edges[to] = Edge(fare, duration, cost)
             
 
-def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, List[int]]:
+def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, int, List[int]]:
     # Initialize distances dictionary and predecessors dictionary
     distances = {vertex: float('infinity') for vertex in graph}
     predecessors = {vertex: None for vertex in graph}
@@ -55,34 +74,37 @@ def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, List[in
         if current_distance > distances[current_vertex]:
             continue
         
-        edges = graph[current_vertex].paths
+        edges = graph[current_vertex].edges
         # Check all neighbors of the current vertex
         for target in edges:
-            weight = edges[target]
-            new_distance = current_distance + weight
+            edge = edges[target]
+            new_distance = current_distance + edge.cost
             if new_distance < distances[target]:
                 distances[target] = new_distance
                 predecessors[target] = current_vertex
                 heapq.heappush(priority_queue, (new_distance, target))
     
+    if end not in distances:
+        return None, None, []
     
-    shortest_path = []
+    vertex_path = []
     current_vertex = end
+    total_cost = 0
+    total_time = 0
+
     while predecessors[current_vertex] is not None:
-        node = graph[current_vertex]
-        shortest_path.insert(0, {
-            'station_id': node.station_id
-        })
-        current_vertex = predecessors[current_vertex]
+        vertex_path.insert(0, graph[current_vertex].info)
+        prev_vertex = predecessors[current_vertex]
+        edge = graph[prev_vertex].edges[current_vertex]
+
+        total_cost += edge.fare
+        total_time += edge.duration
+
+        current_vertex = prev_vertex
+    vertex_path.insert(0, graph[start].info)
+
+    return total_time, total_cost, vertex_path
     
-    node = graph[start]
-    shortest_path.insert(0, {
-        'station_id': node.station_id
-    })
-    
-    if end in distances:
-        return distances[end], shortest_path
-    return None, []
 
 
 STARTING_NODE_VAL = 0
@@ -92,7 +114,7 @@ def time_to_minutes(time: str) -> int:
     slices = time.split(':', 3)
     return int(slices[0]) * 60 + int(slices[1])
 
-def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict, Dict]:
+def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict[int, Node], Dict]:
     stops = []
     with connection.cursor() as cursor:
         cursor.execute(
@@ -111,70 +133,62 @@ def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict, Dict]:
     node_count = 1
 
     for stop in stops:
-        print(stop)
         (train_id, station_id, arrival_time, departure_time, fare) = stop
         dep_time = None if not bool(departure_time) else time_to_minutes(departure_time)
         arr_time = None if not bool(arrival_time) else time_to_minutes(arrival_time)
-        stops2.append((train_id, station_id, arrival_time, departure_time, fare, arr_time, dep_time))
+        stops2.append((train_id, station_id, fare, arr_time))
 
         if station_id == from_id:
-            print("Ok strat")
             if STARTING_NODE_VAL not in graph:
                 graph[STARTING_NODE_VAL] = Node(
                     STARTING_NODE_VAL,
-                    station_id=station_id,
-                    train_id=train_id,
-                    departure_time=departure_time,
-                    departure_minute=dep_time,
-                    arrival_time=arrival_time,
-                    arrival_minute=arr_time
+                    station_id,
+                    dep_time,
+                    departure_time,
+                    None,
+                    train_id
                 )
             continue
         if station_id == to_id:
-            print("Ok End")
             if ENDING_NODE_VAL not in graph:
                 graph[ENDING_NODE_VAL] = Node(
                     ENDING_NODE_VAL,
-                    station_id=station_id,
-                    train_id=train_id,
-                    departure_time=departure_time,
-                    departure_minute=dep_time,
-                    arrival_time=arrival_time,
-                    arrival_minute=arr_time
+                    station_id,
+                    dep_time,
+                    None,
+                    arrival_time,
+                    train_id
                 )
             continue
         departure_time = stop[3]
         station_map = station_time_node.get(station_id)
         if station_map is None:
-            station_map = {}
+            station_map = []
             station_time_node[station_id] = station_map
         if not bool(departure_time):
             continue
-        node = station_map.get(departure_time)
-        if node is None:
-            node_count += 1
-            node = Node(
-                node_count,
-                station_id=station_id,
-                train_id=train_id,
-                departure_time=departure_time,
-                departure_minute=dep_time,
-                arrival_time=arrival_time,
-                arrival_minute=arr_time
-            )
-            station_map[departure_time] = node
-            graph[node_count] = node
+        node_count += 1
+        node = Node(
+            node_count,
+            station_id,
+            dep_time,
+            departure_time,
+            arrival_time,
+            train_id
+        )
+        station_map.append(node)
+        graph[node_count] = node
     
     return stops2, graph, station_time_node
 
 
 def optimal_cost_path(from_id: int, to_id: int):
     stops, graph, station_time_node = prepare_stops(from_id, to_id)
-    train_last_node = {}
+    train_last_node: Dict[int, Node] = {}
 
     for stop in stops:
 
-        (train_id, station_id, arrival_time, departure_time, fare, _, _) = stop
+        (train_id, station_id, fare, arr_time) = stop
 
         if station_id == from_id:
             train_last_node[train_id] = graph[STARTING_NODE_VAL]
@@ -185,30 +199,27 @@ def optimal_cost_path(from_id: int, to_id: int):
 
         if station_id == to_id:
             if last_node is not None:
-                last_node.add_path(ENDING_NODE_VAL, fare)
+                last_node.add_edge(
+                    ENDING_NODE_VAL,
+                    fare=fare,
+                    duration = arr_time - last_node.dep_time,
+                    cost=fare
+                )
                 del train_last_node[train_id]
             continue
 
 
-        station_map = station_time_node[station_id]
-        if bool(departure_time):
-            node = station_map[departure_time]
-            train_last_node[train_id] = node
-
-
+        station_map: List[Node] = station_time_node[station_id]
         
-        if last_node is None:
-            continue
-        
-        
-        for time in station_map:
-            if time >= arrival_time:
-                node: Node = station_map[time]
-                last_node.add_path(node.value, fare)
+        for node in station_map:
+            if node.info['train_id'] == train_id:
+                train_last_node[train_id] = node
+                if not last_node:
+                    break
+            if not last_node:
+                continue
+            last_node.add_edge(node.value, fare, node.dep_time - last_node.dep_time, fare)
                     
-    # print("\n\n\nGraph:\n")
-    # for node_val in graph:
-    #     print("%d\t%s\n" % (node_val, json.dumps(graph[node_val].paths, indent=2)))
 
     if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
         return None, []
@@ -222,7 +233,8 @@ def optimal_time_path(from_id: int, to_id: int):
 
     for stop in stops:
 
-        (train_id, station_id, arrival_time, departure_time, _, arrival_minute, _) = stop
+        (train_id, station_id, fare, arr_time) = stop
+
         if station_id == from_id:
             train_last_node[train_id] = graph[STARTING_NODE_VAL]
             continue
@@ -232,29 +244,29 @@ def optimal_time_path(from_id: int, to_id: int):
 
         if station_id == to_id:
             if last_node is not None:
-                last_node.add_path(ENDING_NODE_VAL, arrival_minute - last_node.departure_minute)
+                dur = arr_time - last_node.dep_time
+                last_node.add_edge(
+                    ENDING_NODE_VAL,
+                    fare=fare,
+                    duration=dur,
+                    cost=dur
+                )
                 del train_last_node[train_id]
             continue
 
 
-        station_map = station_time_node[station_id]
-        if bool(departure_time):
-            node = station_map[departure_time]
-            train_last_node[train_id] = node
-
-
+        station_map: List[Node] = station_time_node[station_id]
         
-        if last_node is None:
-            continue
-        
-        for time in station_map:
-            if time >= arrival_time:
-                node: Node = station_map[time]
-                last_node.add_path(node.value, node.departure_minute - last_node.departure_minute)
+        for node in station_map:
+            if node.info['train_id'] == train_id:
+                train_last_node[train_id] = node
+                if not last_node:
+                    break
+            if not last_node:
+                continue
+            dur = node.dep_time - last_node.dep_time
+            last_node.add_edge(node.value, fare, dur, dur)
                     
-    # print("\n\n\nGraph:\n")
-    # for node_val in graph:
-    #     print("%d\t%s\n" % (node_val, json.dumps(graph[node_val].paths, indent=2)))
 
     if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
         return None, []
