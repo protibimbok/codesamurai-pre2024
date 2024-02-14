@@ -96,7 +96,7 @@ def optimal_plan(request):
     else:
         total_time, total_cost, lpath = optimal_time_path(from_id, to_id)
     
-    if total_cost is None:
+    if total_cost is None or total_time is None:
         return Response({
             "message": "no routes available for station: %d to station:%d" % (from_id, to_id)
         }, status=status.HTTP_403_FORBIDDEN)

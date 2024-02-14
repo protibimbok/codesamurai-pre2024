@@ -107,14 +107,13 @@ def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, int, Li
     
 
 
-STARTING_NODE_VAL = 0
-ENDING_NODE_VAL = 1
+ENDING_NODE_VAL = 0
 
 def time_to_minutes(time: str) -> int:
     slices = time.split(':', 3)
     return int(slices[0]) * 60 + int(slices[1])
 
-def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict[int, Node], Dict]:
+def prepare_stops(to_id: int) -> Tuple[List[Tuple], Dict[int, Node], Dict[int, List[Node]]]:
     stops = []
     with connection.cursor() as cursor:
         cursor.execute(
@@ -129,8 +128,8 @@ def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict[int, Node
     stops2 = []
 
     graph = {}
-    station_time_node = {}
-    node_count = 1
+    station_nodes = {}
+    node_count = 0
 
     for stop in stops:
         (train_id, station_id, arrival_time, departure_time, fare) = stop
@@ -138,17 +137,6 @@ def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict[int, Node
         arr_time = None if not bool(arrival_time) else time_to_minutes(arrival_time)
         stops2.append((train_id, station_id, fare, arr_time))
 
-        if station_id == from_id:
-            if STARTING_NODE_VAL not in graph:
-                graph[STARTING_NODE_VAL] = Node(
-                    STARTING_NODE_VAL,
-                    station_id,
-                    dep_time,
-                    departure_time,
-                    None,
-                    train_id
-                )
-            continue
         if station_id == to_id:
             if ENDING_NODE_VAL not in graph:
                 graph[ENDING_NODE_VAL] = Node(
@@ -161,10 +149,10 @@ def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict[int, Node
                 )
             continue
         departure_time = stop[3]
-        station_map = station_time_node.get(station_id)
+        station_map = station_nodes.get(station_id)
         if station_map is None:
             station_map = []
-            station_time_node[station_id] = station_map
+            station_nodes[station_id] = station_map
         if not bool(departure_time):
             continue
         node_count += 1
@@ -179,21 +167,16 @@ def prepare_stops(from_id: int, to_id: int) -> Tuple[List[Tuple], Dict[int, Node
         station_map.append(node)
         graph[node_count] = node
     
-    return stops2, graph, station_time_node
+    return stops2, graph, station_nodes
 
 
 def optimal_cost_path(from_id: int, to_id: int):
-    stops, graph, station_time_node = prepare_stops(from_id, to_id)
+    stops, graph, station_nodes = prepare_stops(to_id)
     train_last_node: Dict[int, Node] = {}
 
     for stop in stops:
 
         (train_id, station_id, fare, arr_time) = stop
-
-        if station_id == from_id:
-            train_last_node[train_id] = graph[STARTING_NODE_VAL]
-            continue
-            
 
         last_node = train_last_node.get(train_id)
 
@@ -209,7 +192,7 @@ def optimal_cost_path(from_id: int, to_id: int):
             continue
 
 
-        station_map: List[Node] = station_time_node[station_id]
+        station_map: List[Node] = station_nodes[station_id]
         
         for node in station_map:
             if node.info['train_id'] == train_id:
@@ -221,24 +204,26 @@ def optimal_cost_path(from_id: int, to_id: int):
             last_node.add_edge(node.value, fare, node.dep_time - last_node.dep_time, fare)
                     
 
-    if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
+    if ENDING_NODE_VAL not in graph:
         return None, None, []
     
-    return dijkstra(graph, STARTING_NODE_VAL, ENDING_NODE_VAL)
+    total_time, total_cost, lpath = None, float('infinity'), []
+    
+    for start in station_nodes[from_id]:
+        t, c, p = dijkstra(graph, start.value, ENDING_NODE_VAL)
+        if c < total_cost:
+            total_time, total_cost, lpath = t, c, p
+
+    return total_time, total_cost, lpath
 
 
 def optimal_time_path(from_id: int, to_id: int):
-    stops, graph, station_time_node = prepare_stops(from_id, to_id)
+    stops, graph, station_nodes = prepare_stops(from_id, to_id)
     train_last_node: Dict[int, Node] = {}
 
     for stop in stops:
 
         (train_id, station_id, fare, arr_time) = stop
-
-        if station_id == from_id:
-            train_last_node[train_id] = graph[STARTING_NODE_VAL]
-            continue
-            
 
         last_node = train_last_node.get(train_id)
 
@@ -255,7 +240,7 @@ def optimal_time_path(from_id: int, to_id: int):
             continue
 
 
-        station_map: List[Node] = station_time_node[station_id]
+        station_map: List[Node] = station_nodes[station_id]
         
         for node in station_map:
             if node.info['train_id'] == train_id:
@@ -268,8 +253,15 @@ def optimal_time_path(from_id: int, to_id: int):
             last_node.add_edge(node.value, fare, dur, dur)
                     
 
-    if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
+    if ENDING_NODE_VAL not in graph:
         return None, None, []
     
-    return dijkstra(graph, STARTING_NODE_VAL, ENDING_NODE_VAL)
+    total_time, total_cost, lpath = float('infinity'), None, []
+    
+    for start in station_nodes[from_id]:
+        t, c, p = dijkstra(graph, start.value, ENDING_NODE_VAL)
+        if t < total_time:
+            total_time, total_cost, lpath = t, c, p
+
+    return total_time, total_cost, lpath
 
