@@ -222,7 +222,7 @@ def optimal_cost_path(from_id: int, to_id: int):
                     
 
     if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
-        return None, []
+        return None, None, []
     
     return dijkstra(graph, STARTING_NODE_VAL, ENDING_NODE_VAL)
 
@@ -269,7 +269,7 @@ def optimal_time_path(from_id: int, to_id: int):
                     
 
     if STARTING_NODE_VAL not in graph or ENDING_NODE_VAL not in graph:
-        return None, []
+        return None, None, []
     
     return dijkstra(graph, STARTING_NODE_VAL, ENDING_NODE_VAL)
 
