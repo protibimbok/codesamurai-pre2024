@@ -61,7 +61,7 @@ def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, List[in
                 predecessors[target] = current_vertex
                 heapq.heappush(priority_queue, (new_distance, target))
     
-    if end not in distances:
+    if end not in distances or distances[end] == float('infinity'):
         return None, []
 
     shortest_path = []

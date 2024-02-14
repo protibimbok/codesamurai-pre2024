@@ -84,7 +84,7 @@ def dijkstra(graph: Dict[int, Node], start: int, end: int) -> Tuple[int, int, Li
                 predecessors[target] = current_vertex
                 heapq.heappush(priority_queue, (new_distance, target))
     
-    if end not in distances:
+    if end not in distances or distances[end] == float('infinity'):
         return None, None, []
     
     vertex_path = []
