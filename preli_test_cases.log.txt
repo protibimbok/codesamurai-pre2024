@@ -1,0 +1,2337 @@
+Test 1
+GET /api/stations
+
+Test 2
+GET /api/stations/1/trains
+
+Test 3
+POST /api/users
+{
+  "user_id": 1,
+  "user_name": "ASIF",
+  "balance": 1005
+}
+
+Test 4
+POST /api/users
+{
+  "user_id": 2,
+  "user_name": "FAHIM",
+  "balance": 1005
+}
+
+Test 5
+POST /api/users
+{
+  "user_id": 3,
+  "user_name": "SADI",
+  "balance": 1005
+}
+
+Test 6
+POST /api/users
+{
+  "user_id": 4,
+  "user_name": "ZOBA",
+  "balance": 1005
+}
+
+Test 7
+POST /api/users
+{
+  "user_id": 5,
+  "user_name": "SAKI",
+  "balance": 1005
+}
+
+Test 8
+POST /api/stations
+{
+  "station_id": 1,
+  "station_name": "GULSHAN",
+  "latitude": 23.7802946,
+  "longitude": 90.4162986
+}
+
+Test 9
+POST /api/stations
+{
+  "station_id": 2,
+  "station_name": "FARMGATE",
+  "latitude": 23.7582128,
+  "longitude": 90.3903738
+}
+
+Test 10
+POST /api/stations
+{
+  "station_id": 3,
+  "station_name": "CMH",
+  "latitude": 23.8136214,
+  "longitude": 90.4001198
+}
+
+Test 11
+POST /api/stations
+{
+  "station_id": 4,
+  "station_name": "GARRISON",
+  "latitude": 23.8024127,
+  "longitude": 90.395533
+}
+
+Test 12
+POST /api/stations
+{
+  "station_id": 5,
+  "station_name": "POST OFFICE",
+  "latitude": 23.799763,
+  "longitude": 90.3939703
+}
+
+Test 13
+POST /api/stations
+{
+  "station_id": 6,
+  "station_name": "ADAMJEE",
+  "latitude": 23.7951081,
+  "longitude": 90.3929531
+}
+
+Test 14
+POST /api/stations
+{
+  "station_id": 7,
+  "station_name": "BASHTOLA",
+  "latitude": 23.7943849,
+  "longitude": 90.4240761
+}
+
+Test 15
+POST /api/stations
+{
+  "station_id": 8,
+  "station_name": "NOTUN BAZAR",
+  "latitude": 23.7969059,
+  "longitude": 90.4237478
+}
+
+Test 16
+POST /api/stations
+{
+  "station_id": 9,
+  "station_name": "COCA COLA",
+  "latitude": 23.8048949,
+  "longitude": 90.4218334
+}
+
+Test 17
+POST /api/stations
+{
+  "station_id": 10,
+  "station_name": "PRESSCLUB",
+  "latitude": 23.7298956,
+  "longitude": 90.4068614
+}
+
+Test 18
+POST /api/stations
+{
+  "station_id": 11,
+  "station_name": "BRTC",
+  "latitude": 23.7736411,
+  "longitude": 90.3675766
+}
+
+Test 19
+POST /api/stations
+{
+  "station_id": 12,
+  "station_name": "KOLLANPUR",
+  "latitude": 23.7779082,
+  "longitude": 90.3610485
+}
+
+Test 20
+POST /api/stations
+{
+  "station_id": 13,
+  "station_name": "DARUSSLAM",
+  "latitude": 23.7798185,
+  "longitude": 90.3548453
+}
+
+Test 21
+POST /api/stations
+{
+  "station_id": 14,
+  "station_name": "PROSHIKA MORE",
+  "latitude": 23.8096296,
+  "longitude": 90.36101
+}
+
+Test 22
+POST /api/stations
+{
+  "station_id": 15,
+  "station_name": "SHIYAL BARI MORE",
+  "latitude": 23.8083321,
+  "longitude": 90.3579846
+}
+
+Test 23
+POST /api/stations
+{
+  "station_id": 16,
+  "station_name": "UTTAR BADDA",
+  "latitude": 23.7857042,
+  "longitude": 90.4256113
+}
+
+Test 24
+POST /api/stations
+{
+  "station_id": 17,
+  "station_name": "JIGATOLA",
+  "latitude": 23.7392833,
+  "longitude": 90.3754038
+}
+
+Test 25
+POST /api/stations
+{
+  "station_id": 18,
+  "station_name": "BATA SIGNAL",
+  "latitude": 23.7389887,
+  "longitude": 90.388255
+}
+
+Test 26
+POST /api/stations
+{
+  "station_id": 19,
+  "station_name": "MALANCHA",
+  "latitude": 23.705659,
+  "longitude": 90.4193518
+}
+
+Test 27
+POST /api/stations
+{
+  "station_id": 20,
+  "station_name": "RAMPURA BRIDGE",
+  "latitude": 23.7679175,
+  "longitude": 90.4231695
+}
+
+Test 28
+POST /api/stations
+{
+  "station_id": 21,
+  "station_name": "SANARPAR",
+  "latitude": 23.6949106,
+  "longitude": 90.4902493
+}
+
+Test 29
+POST /api/stations
+{
+  "station_id": 22,
+  "station_name": "MOUCHAK",
+  "latitude": 23.695386,
+  "longitude": 90.495149
+}
+
+Test 30
+POST /api/stations
+{
+  "station_id": 23,
+  "station_name": "MRIDHA BARI",
+  "latitude": 23.7104421,
+  "longitude": 90.4430912
+}
+
+Test 31
+POST /api/stations
+{
+  "station_id": 24,
+  "station_name": "RAYERBAG",
+  "latitude": 23.699431,
+  "longitude": 90.457022
+}
+
+Test 32
+POST /api/stations
+{
+  "station_id": 25,
+  "station_name": "MATUAIL MEDICAL",
+  "latitude": 23.6949652,
+  "longitude": 90.4663909
+}
+
+Test 33
+POST /api/stations
+{
+  "station_id": 26,
+  "station_name": "SADDAM MARKET",
+  "latitude": 23.6929982,
+  "longitude": 90.4739771
+}
+
+Test 34
+POST /api/stations
+{
+  "station_id": 27,
+  "station_name": "KONAPARA",
+  "latitude": 23.7169046,
+  "longitude": 90.4683457
+}
+
+Test 35
+POST /api/stations
+{
+  "station_id": 28,
+  "station_name": "SONALI MARKET",
+  "latitude": 23.6856443,
+  "longitude": 90.4817831
+}
+
+Test 36
+POST /api/stations
+{
+  "station_id": 29,
+  "station_name": "KAZIBARI",
+  "latitude": 23.6793023,
+  "longitude": 90.482303
+}
+
+Test 37
+POST /api/stations
+{
+  "station_id": 30,
+  "station_name": "MIDDLE BADDA",
+  "latitude": 23.7773828,
+  "longitude": 90.4258486
+}
+
+Test 38
+POST /api/stations
+{
+  "station_id": 31,
+  "station_name": "MERUL BADDA",
+  "latitude": 23.7716566,
+  "longitude": 90.4253879
+}
+
+Test 39
+POST /api/stations
+{
+  "station_id": 32,
+  "station_name": "DUARIPARA",
+  "latitude": 23.8235731,
+  "longitude": 90.3569526
+}
+
+Test 40
+POST /api/stations
+{
+  "station_id": 33,
+  "station_name": "MOHAMMADPUR",
+  "latitude": 23.7569928,
+  "longitude": 90.3617359
+}
+
+Test 41
+POST /api/stations
+{
+  "station_id": 34,
+  "station_name": "MIRPUR 13",
+  "latitude": 23.7565428,
+  "longitude": 90.362267
+}
+
+Test 42
+POST /api/stations
+{
+  "station_id": 35,
+  "station_name": "SHYAMOLI",
+  "latitude": 23.8088054,
+  "longitude": 90.4214847
+}
+
+Test 43
+POST /api/stations
+{
+  "station_id": 36,
+  "station_name": "SHAHEEN COLLEGE",
+  "latitude": 23.8275583,
+  "longitude": 90.4015705
+}
+
+Test 44
+POST /api/stations
+{
+  "station_id": 37,
+  "station_name": "RAJLAKSHMI",
+  "latitude": 23.8643282,
+  "longitude": 90.3999441
+}
+
+Test 45
+POST /api/stations
+{
+  "station_id": 38,
+  "station_name": "JASHIMUDDIN",
+  "latitude": 23.8608599,
+  "longitude": 90.4000486
+}
+
+Test 46
+POST /api/stations
+{
+  "station_id": 39,
+  "station_name": "CHANKHARPUL",
+  "latitude": 23.7238542,
+  "longitude": 90.4002639
+}
+
+Test 47
+POST /api/stations
+{
+  "station_id": 40,
+  "station_name": "DHANMONDI 32",
+  "latitude": 23.7516016,
+  "longitude": 90.3779467
+}
+
+Test 48
+POST /api/stations
+{
+  "station_id": 41,
+  "station_name": "BHUIGOR",
+  "latitude": 23.6773759,
+  "longitude": 90.4823732
+}
+
+Test 49
+POST /api/stations
+{
+  "station_id": 42,
+  "station_name": "SANGSAD BHABAN",
+  "latitude": 23.7585278,
+  "longitude": 90.3753925
+}
+
+Test 50
+POST /api/stations
+{
+  "station_id": 43,
+  "station_name": "BOSILA",
+  "latitude": 23.7450945,
+  "longitude": 90.3475527
+}
+
+Test 51
+POST /api/stations
+{
+  "station_id": 44,
+  "station_name": "RAJLAKSHMI",
+  "latitude": 23.8644797,
+  "longitude": 90.4002124
+}
+
+Test 52
+POST /api/stations
+{
+  "station_id": 45,
+  "station_name": "VHAOAR VITI",
+  "latitude": 23.6461651,
+  "longitude": 90.3493179
+}
+
+Test 53
+POST /api/stations
+{
+  "station_id": 46,
+  "station_name": "ABDULLAHPUR",
+  "latitude": 23.6602959,
+  "longitude": 90.3593277
+}
+
+Test 54
+POST /api/stations
+{
+  "station_id": 47,
+  "station_name": "RAJENDRAPUR",
+  "latitude": 23.6633233,
+  "longitude": 90.3903178
+}
+
+Test 55
+POST /api/stations
+{
+  "station_id": 48,
+  "station_name": "EKURIA",
+  "latitude": 23.6826915,
+  "longitude": 90.4199583
+}
+
+Test 56
+POST /api/stations
+{
+  "station_id": 49,
+  "station_name": "DHOLAIRPAR",
+  "latitude": 23.702791,
+  "longitude": 90.4351668
+}
+
+Test 57
+POST /api/stations
+{
+  "station_id": 50,
+  "station_name": "ECB CHOTTOR",
+  "latitude": 23.822575,
+  "longitude": 90.3936169
+}
+
+Test 58
+POST /api/stations
+{
+  "station_id": 51,
+  "station_name": "MAMUDPUR",
+  "latitude": 23.6840571,
+  "longitude": 90.4820931
+}
+
+Test 59
+POST /api/stations
+{
+  "station_id": 52,
+  "station_name": "BHUIGOR",
+  "latitude": 23.6774707,
+  "longitude": 90.4823041
+}
+
+Test 60
+POST /api/stations
+{
+  "station_id": 53,
+  "station_name": "RUPAYAN TOWN",
+  "latitude": 23.6755439,
+  "longitude": 90.4829056
+}
+
+Test 61
+POST /api/stations
+{
+  "station_id": 54,
+  "station_name": "JALKURI",
+  "latitude": 23.6637211,
+  "longitude": 90.4869259
+}
+
+Test 62
+POST /api/stations
+{
+  "station_id": 55,
+  "station_name": "KHAN SHAHEB OSMAN ALI STADIUM",
+  "latitude": 23.651232,
+  "longitude": 90.4911709
+}
+
+Test 63
+POST /api/stations
+{
+  "station_id": 56,
+  "station_name": "SIBU MARKET",
+  "latitude": 23.6447516,
+  "longitude": 90.4933956
+}
+
+Test 64
+POST /api/stations
+{
+  "station_id": 57,
+  "station_name": "DAPA",
+  "latitude": 23.6475826,
+  "longitude": 90.4689561
+}
+
+Test 65
+POST /api/stations
+{
+  "station_id": 58,
+  "station_name": "ALIGONJ",
+  "latitude": 23.6550908,
+  "longitude": 90.4627148
+}
+
+Test 66
+POST /api/stations
+{
+  "station_id": 59,
+  "station_name": "PAGLA",
+  "latitude": 23.6615459,
+  "longitude": 90.4565864
+}
+
+Test 67
+POST /api/stations
+{
+  "station_id": 60,
+  "station_name": "ADAMJEE EPZ",
+  "latitude": 23.6782049,
+  "longitude": 90.517236
+}
+
+Test 68
+POST /api/stations
+{
+  "station_id": 61,
+  "station_name": "ADAMJEE KOMOL MIN",
+  "latitude": 23.6764046,
+  "longitude": 90.5177799
+}
+
+Test 69
+POST /api/stations
+{
+  "station_id": 62,
+  "station_name": "ADAMJEE NAGAR",
+  "latitude": 23.6735081,
+  "longitude": 90.5184519
+}
+
+Test 70
+POST /api/stations
+{
+  "station_id": 63,
+  "station_name": "SONAMIA MARKET",
+  "latitude": 23.6734027,
+  "longitude": 90.5183595
+}
+
+Test 71
+POST /api/stations
+{
+  "station_id": 64,
+  "station_name": "SO",
+  "latitude": 23.6676011,
+  "longitude": 90.516093
+}
+
+Test 72
+POST /api/stations
+{
+  "station_id": 65,
+  "station_name": "BARMA STAND",
+  "latitude": 23.664427,
+  "longitude": 90.514506
+}
+
+Test 73
+POST /api/stations
+{
+  "station_id": 66,
+  "station_name": "DUI NONG",
+  "latitude": 23.6576172,
+  "longitude": 90.5118646
+}
+
+Test 74
+POST /api/stations
+{
+  "station_id": 67,
+  "station_name": "SYED PARA",
+  "latitude": 23.6538581,
+  "longitude": 90.5113118
+}
+
+Test 75
+POST /api/stations
+{
+  "station_id": 68,
+  "station_name": "TATKHANA",
+  "latitude": 23.6509762,
+  "longitude": 90.5121375
+}
+
+Test 76
+POST /api/stations
+{
+  "station_id": 69,
+  "station_name": "CHOWDHURY BARI",
+  "latitude": 23.6478482,
+  "longitude": 90.5133769
+}
+
+Test 77
+POST /api/stations
+{
+  "station_id": 70,
+  "station_name": "MAZIPARA POL",
+  "latitude": 23.6438476,
+  "longitude": 90.512947
+}
+
+Test 78
+POST /api/stations
+{
+  "station_id": 71,
+  "station_name": "AMINBAZAR",
+  "latitude": 23.7863274,
+  "longitude": 90.3292463
+}
+
+Test 79
+POST /api/stations
+{
+  "station_id": 72,
+  "station_name": "BILAMALIA",
+  "latitude": 23.7896761,
+  "longitude": 90.3161699
+}
+
+Test 80
+POST /api/stations
+{
+  "station_id": 73,
+  "station_name": "BOLIARPUR",
+  "latitude": 23.7952922,
+  "longitude": 90.2902823
+}
+
+Test 81
+POST /api/stations
+{
+  "station_id": 74,
+  "station_name": "ALOM NOGOR",
+  "latitude": 23.7950478,
+  "longitude": 90.2812759
+}
+
+Test 82
+POST /api/stations
+{
+  "station_id": 75,
+  "station_name": "HEMAYETPUR",
+  "latitude": 23.7933675,
+  "longitude": 90.2712202
+}
+
+Test 83
+POST /api/stations
+{
+  "station_id": 76,
+  "station_name": "GAM FACTORY",
+  "latitude": 23.7987004,
+  "longitude": 90.2632548
+}
+
+Test 84
+POST /api/stations
+{
+  "station_id": 77,
+  "station_name": "JHORPUL",
+  "latitude": 23.7985391,
+  "longitude": 90.2633402
+}
+
+Test 85
+POST /api/stations
+{
+  "station_id": 78,
+  "station_name": "TATULZHORA",
+  "latitude": 23.8016763,
+  "longitude": 90.2624872
+}
+
+Test 86
+POST /api/stations
+{
+  "station_id": 79,
+  "station_name": "RADIO COLONY",
+  "latitude": 23.8587781,
+  "longitude": 90.2623546
+}
+
+Test 87
+POST /api/stations
+{
+  "station_id": 80,
+  "station_name": "BPATC",
+  "latitude": 23.865862,
+  "longitude": 90.2701887
+}
+
+Test 88
+POST /api/trains
+{
+  "train_id": 1,
+  "train_name": "Sundarban Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 1,
+      "arrival_time": null,
+      "departure_time": "00:10",
+      "fare": 0
+    },
+    {
+      "station_id": 2,
+      "arrival_time": "00:30",
+      "departure_time": "00:35",
+      "fare": 5
+    },
+    {
+      "station_id": 3,
+      "arrival_time": "00:50",
+      "departure_time": "01:00",
+      "fare": 1000
+    },
+    {
+      "station_id": 4,
+      "arrival_time": "01:20",
+      "departure_time": "01:25",
+      "fare": 5
+    },
+    {
+      "station_id": 5,
+      "arrival_time": "01:40",
+      "departure_time": "01:50",
+      "fare": 1000
+    },
+    {
+      "station_id": 6,
+      "arrival_time": "02:10",
+      "departure_time": "02:15",
+      "fare": 5
+    },
+    {
+      "station_id": 7,
+      "arrival_time": "02:30",
+      "departure_time": "02:40",
+      "fare": 1000
+    },
+    {
+      "station_id": 8,
+      "arrival_time": "03:00",
+      "departure_time": "03:05",
+      "fare": 5
+    },
+    {
+      "station_id": 9,
+      "arrival_time": "03:20",
+      "departure_time": "03:30",
+      "fare": 1000
+    },
+    {
+      "station_id": 10,
+      "arrival_time": "03:50",
+      "departure_time": "03:55",
+      "fare": 5
+    },
+    {
+      "station_id": 11,
+      "arrival_time": "04:10",
+      "departure_time": "04:20",
+      "fare": 1000
+    },
+    {
+      "station_id": 12,
+      "arrival_time": "04:40",
+      "departure_time": "04:45",
+      "fare": 5
+    },
+    {
+      "station_id": 13,
+      "arrival_time": "05:00",
+      "departure_time": "05:10",
+      "fare": 1000
+    },
+    {
+      "station_id": 14,
+      "arrival_time": "05:30",
+      "departure_time": "05:35",
+      "fare": 5
+    },
+    {
+      "station_id": 15,
+      "arrival_time": "05:50",
+      "departure_time": "06:00",
+      "fare": 1000
+    },
+    {
+      "station_id": 16,
+      "arrival_time": "06:20",
+      "departure_time": "06:25",
+      "fare": 5
+    },
+    {
+      "station_id": 17,
+      "arrival_time": "06:40",
+      "departure_time": "06:50",
+      "fare": 1000
+    },
+    {
+      "station_id": 18,
+      "arrival_time": "07:10",
+      "departure_time": "07:15",
+      "fare": 5
+    },
+    {
+      "station_id": 19,
+      "arrival_time": "07:30",
+      "departure_time": "07:40",
+      "fare": 1000
+    },
+    {
+      "station_id": 20,
+      "arrival_time": "08:00",
+      "departure_time": "08:05",
+      "fare": 5
+    },
+    {
+      "station_id": 21,
+      "arrival_time": "08:20",
+      "departure_time": "08:30",
+      "fare": 1000
+    },
+    {
+      "station_id": 22,
+      "arrival_time": "08:50",
+      "departure_time": "08:55",
+      "fare": 5
+    },
+    {
+      "station_id": 23,
+      "arrival_time": "09:10",
+      "departure_time": "09:20",
+      "fare": 1000
+    },
+    {
+      "station_id": 24,
+      "arrival_time": "09:40",
+      "departure_time": "09:45",
+      "fare": 5
+    },
+    {
+      "station_id": 25,
+      "arrival_time": "10:00",
+      "departure_time": "10:10",
+      "fare": 1000
+    },
+    {
+      "station_id": 26,
+      "arrival_time": "10:30",
+      "departure_time": "10:35",
+      "fare": 5
+    },
+    {
+      "station_id": 27,
+      "arrival_time": "10:50",
+      "departure_time": "11:00",
+      "fare": 1000
+    },
+    {
+      "station_id": 28,
+      "arrival_time": "11:20",
+      "departure_time": "11:25",
+      "fare": 5
+    },
+    {
+      "station_id": 29,
+      "arrival_time": "11:40",
+      "departure_time": "11:50",
+      "fare": 1000
+    },
+    {
+      "station_id": 30,
+      "arrival_time": "12:10",
+      "departure_time": "12:15",
+      "fare": 5
+    },
+    {
+      "station_id": 31,
+      "arrival_time": "12:30",
+      "departure_time": "12:40",
+      "fare": 1000
+    },
+    {
+      "station_id": 32,
+      "arrival_time": "13:00",
+      "departure_time": "13:05",
+      "fare": 5
+    },
+    {
+      "station_id": 33,
+      "arrival_time": "13:20",
+      "departure_time": "13:30",
+      "fare": 1000
+    },
+    {
+      "station_id": 34,
+      "arrival_time": "13:50",
+      "departure_time": "13:55",
+      "fare": 5
+    },
+    {
+      "station_id": 35,
+      "arrival_time": "14:10",
+      "departure_time": "14:20",
+      "fare": 1000
+    },
+    {
+      "station_id": 36,
+      "arrival_time": "14:40",
+      "departure_time": "14:45",
+      "fare": 5
+    },
+    {
+      "station_id": 37,
+      "arrival_time": "15:00",
+      "departure_time": "15:10",
+      "fare": 1000
+    },
+    {
+      "station_id": 38,
+      "arrival_time": "15:30",
+      "departure_time": "15:35",
+      "fare": 5
+    },
+    {
+      "station_id": 39,
+      "arrival_time": "15:50",
+      "departure_time": "16:00",
+      "fare": 1000
+    },
+    {
+      "station_id": 40,
+      "arrival_time": "16:20",
+      "departure_time": null,
+      "fare": 5
+    }
+  ]
+}
+
+Test 89
+POST /api/trains
+{
+  "train_id": 2,
+  "train_name": "Ekota Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 1,
+      "arrival_time": null,
+      "departure_time": "00:11",
+      "fare": 0
+    },
+    {
+      "station_id": 41,
+      "arrival_time": "00:12",
+      "departure_time": "00:13",
+      "fare": 9999
+    },
+    {
+      "station_id": 2,
+      "arrival_time": "00:31",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 90
+POST /api/trains
+{
+  "train_id": 3,
+  "train_name": "Silk City Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 2,
+      "arrival_time": null,
+      "departure_time": "00:36",
+      "fare": 0
+    },
+    {
+      "station_id": 42,
+      "arrival_time": "00:37",
+      "departure_time": "00:38",
+      "fare": 2
+    },
+    {
+      "station_id": 3,
+      "arrival_time": "00:51",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 91
+POST /api/trains
+{
+  "train_id": 4,
+  "train_name": "Padma Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 3,
+      "arrival_time": null,
+      "departure_time": "01:01",
+      "fare": 0
+    },
+    {
+      "station_id": 43,
+      "arrival_time": "01:02",
+      "departure_time": "01:03",
+      "fare": 9999
+    },
+    {
+      "station_id": 4,
+      "arrival_time": "01:21",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 92
+POST /api/trains
+{
+  "train_id": 5,
+  "train_name": "Chitra Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 4,
+      "arrival_time": null,
+      "departure_time": "01:26",
+      "fare": 0
+    },
+    {
+      "station_id": 44,
+      "arrival_time": "01:27",
+      "departure_time": "01:28",
+      "fare": 2
+    },
+    {
+      "station_id": 5,
+      "arrival_time": "01:41",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 93
+POST /api/trains
+{
+  "train_id": 6,
+  "train_name": "Nilsagar Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 5,
+      "arrival_time": null,
+      "departure_time": "01:51",
+      "fare": 0
+    },
+    {
+      "station_id": 45,
+      "arrival_time": "01:52",
+      "departure_time": "01:53",
+      "fare": 9999
+    },
+    {
+      "station_id": 6,
+      "arrival_time": "02:11",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 94
+POST /api/trains
+{
+  "train_id": 7,
+  "train_name": "Rupsa Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 6,
+      "arrival_time": null,
+      "departure_time": "02:16",
+      "fare": 0
+    },
+    {
+      "station_id": 46,
+      "arrival_time": "02:17",
+      "departure_time": "02:18",
+      "fare": 2
+    },
+    {
+      "station_id": 7,
+      "arrival_time": "02:31",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 95
+POST /api/trains
+{
+  "train_id": 8,
+  "train_name": "Titumir Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 7,
+      "arrival_time": null,
+      "departure_time": "02:41",
+      "fare": 0
+    },
+    {
+      "station_id": 47,
+      "arrival_time": "02:42",
+      "departure_time": "02:43",
+      "fare": 9999
+    },
+    {
+      "station_id": 8,
+      "arrival_time": "03:01",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 96
+POST /api/trains
+{
+  "train_id": 9,
+  "train_name": "Barendra Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 8,
+      "arrival_time": null,
+      "departure_time": "03:06",
+      "fare": 0
+    },
+    {
+      "station_id": 48,
+      "arrival_time": "03:07",
+      "departure_time": "03:08",
+      "fare": 2
+    },
+    {
+      "station_id": 9,
+      "arrival_time": "03:21",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 97
+POST /api/trains
+{
+  "train_id": 10,
+  "train_name": "Moitree Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 9,
+      "arrival_time": null,
+      "departure_time": "03:31",
+      "fare": 0
+    },
+    {
+      "station_id": 49,
+      "arrival_time": "03:32",
+      "departure_time": "03:33",
+      "fare": 9999
+    },
+    {
+      "station_id": 10,
+      "arrival_time": "03:51",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 98
+POST /api/trains
+{
+  "train_id": 11,
+  "train_name": "Mahanagar Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 10,
+      "arrival_time": null,
+      "departure_time": "03:56",
+      "fare": 0
+    },
+    {
+      "station_id": 50,
+      "arrival_time": "03:57",
+      "departure_time": "03:58",
+      "fare": 2
+    },
+    {
+      "station_id": 11,
+      "arrival_time": "04:11",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 99
+POST /api/trains
+{
+  "train_id": 12,
+  "train_name": "Mahanagar Provati",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 11,
+      "arrival_time": null,
+      "departure_time": "04:21",
+      "fare": 0
+    },
+    {
+      "station_id": 51,
+      "arrival_time": "04:22",
+      "departure_time": "04:23",
+      "fare": 9999
+    },
+    {
+      "station_id": 12,
+      "arrival_time": "04:41",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 100
+POST /api/trains
+{
+  "train_id": 13,
+  "train_name": "Mahanagar Godhuli",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 12,
+      "arrival_time": null,
+      "departure_time": "04:46",
+      "fare": 0
+    },
+    {
+      "station_id": 52,
+      "arrival_time": "04:47",
+      "departure_time": "04:48",
+      "fare": 2
+    },
+    {
+      "station_id": 13,
+      "arrival_time": "05:01",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 101
+POST /api/trains
+{
+  "train_id": 14,
+  "train_name": "Sonar Bangla Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 13,
+      "arrival_time": null,
+      "departure_time": "05:11",
+      "fare": 0
+    },
+    {
+      "station_id": 53,
+      "arrival_time": "05:12",
+      "departure_time": "05:13",
+      "fare": 9999
+    },
+    {
+      "station_id": 14,
+      "arrival_time": "05:31",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 102
+POST /api/trains
+{
+  "train_id": 15,
+  "train_name": "Tista Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 14,
+      "arrival_time": null,
+      "departure_time": "05:36",
+      "fare": 0
+    },
+    {
+      "station_id": 54,
+      "arrival_time": "05:37",
+      "departure_time": "05:38",
+      "fare": 2
+    },
+    {
+      "station_id": 15,
+      "arrival_time": "05:51",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 103
+POST /api/trains
+{
+  "train_id": 16,
+  "train_name": "Brahmaputra Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 15,
+      "arrival_time": null,
+      "departure_time": "06:01",
+      "fare": 0
+    },
+    {
+      "station_id": 55,
+      "arrival_time": "06:02",
+      "departure_time": "06:03",
+      "fare": 9999
+    },
+    {
+      "station_id": 16,
+      "arrival_time": "06:21",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 104
+POST /api/trains
+{
+  "train_id": 17,
+  "train_name": "Jamuna Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 16,
+      "arrival_time": null,
+      "departure_time": "06:26",
+      "fare": 0
+    },
+    {
+      "station_id": 56,
+      "arrival_time": "06:27",
+      "departure_time": "06:28",
+      "fare": 2
+    },
+    {
+      "station_id": 17,
+      "arrival_time": "06:41",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 105
+POST /api/trains
+{
+  "train_id": 18,
+  "train_name": "Paharika Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 17,
+      "arrival_time": null,
+      "departure_time": "06:51",
+      "fare": 0
+    },
+    {
+      "station_id": 57,
+      "arrival_time": "06:52",
+      "departure_time": "06:53",
+      "fare": 9999
+    },
+    {
+      "station_id": 18,
+      "arrival_time": "07:11",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 106
+POST /api/trains
+{
+  "train_id": 19,
+  "train_name": "Meghna Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 18,
+      "arrival_time": null,
+      "departure_time": "07:16",
+      "fare": 0
+    },
+    {
+      "station_id": 58,
+      "arrival_time": "07:17",
+      "departure_time": "07:18",
+      "fare": 2
+    },
+    {
+      "station_id": 19,
+      "arrival_time": "07:31",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 107
+POST /api/trains
+{
+  "train_id": 20,
+  "train_name": "Upakul Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 19,
+      "arrival_time": null,
+      "departure_time": "07:41",
+      "fare": 0
+    },
+    {
+      "station_id": 59,
+      "arrival_time": "07:42",
+      "departure_time": "07:43",
+      "fare": 9999
+    },
+    {
+      "station_id": 20,
+      "arrival_time": "08:01",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 108
+POST /api/trains
+{
+  "train_id": 21,
+  "train_name": "Turna Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 20,
+      "arrival_time": null,
+      "departure_time": "08:06",
+      "fare": 0
+    },
+    {
+      "station_id": 60,
+      "arrival_time": "08:07",
+      "departure_time": "08:08",
+      "fare": 2
+    },
+    {
+      "station_id": 21,
+      "arrival_time": "08:21",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 109
+POST /api/trains
+{
+  "train_id": 22,
+  "train_name": "Udayan Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 21,
+      "arrival_time": null,
+      "departure_time": "08:31",
+      "fare": 0
+    },
+    {
+      "station_id": 61,
+      "arrival_time": "08:32",
+      "departure_time": "08:33",
+      "fare": 9999
+    },
+    {
+      "station_id": 22,
+      "arrival_time": "08:51",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 110
+POST /api/trains
+{
+  "train_id": 23,
+  "train_name": "Bijoy Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 22,
+      "arrival_time": null,
+      "departure_time": "08:56",
+      "fare": 0
+    },
+    {
+      "station_id": 62,
+      "arrival_time": "08:57",
+      "departure_time": "08:58",
+      "fare": 2
+    },
+    {
+      "station_id": 23,
+      "arrival_time": "09:11",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 111
+POST /api/trains
+{
+  "train_id": 24,
+  "train_name": "Kalni Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 23,
+      "arrival_time": null,
+      "departure_time": "09:21",
+      "fare": 0
+    },
+    {
+      "station_id": 63,
+      "arrival_time": "09:22",
+      "departure_time": "09:23",
+      "fare": 9999
+    },
+    {
+      "station_id": 24,
+      "arrival_time": "09:41",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 112
+POST /api/trains
+{
+  "train_id": 25,
+  "train_name": "Joyantika Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 24,
+      "arrival_time": null,
+      "departure_time": "09:46",
+      "fare": 0
+    },
+    {
+      "station_id": 64,
+      "arrival_time": "09:47",
+      "departure_time": "09:48",
+      "fare": 2
+    },
+    {
+      "station_id": 25,
+      "arrival_time": "10:01",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 113
+POST /api/trains
+{
+  "train_id": 26,
+  "train_name": "Agnibina Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 25,
+      "arrival_time": null,
+      "departure_time": "10:11",
+      "fare": 0
+    },
+    {
+      "station_id": 65,
+      "arrival_time": "10:12",
+      "departure_time": "10:13",
+      "fare": 9999
+    },
+    {
+      "station_id": 26,
+      "arrival_time": "10:31",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 114
+POST /api/trains
+{
+  "train_id": 27,
+  "train_name": "Egaro Sindhur Provati",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 26,
+      "arrival_time": null,
+      "departure_time": "10:36",
+      "fare": 0
+    },
+    {
+      "station_id": 66,
+      "arrival_time": "10:37",
+      "departure_time": "10:38",
+      "fare": 2
+    },
+    {
+      "station_id": 27,
+      "arrival_time": "10:51",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 115
+POST /api/trains
+{
+  "train_id": 28,
+  "train_name": "Egaro Sindhur Godhuli",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 27,
+      "arrival_time": null,
+      "departure_time": "11:01",
+      "fare": 0
+    },
+    {
+      "station_id": 67,
+      "arrival_time": "11:02",
+      "departure_time": "11:03",
+      "fare": 9999
+    },
+    {
+      "station_id": 28,
+      "arrival_time": "11:21",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 116
+POST /api/trains
+{
+  "train_id": 29,
+  "train_name": "Lalmoni Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 28,
+      "arrival_time": null,
+      "departure_time": "11:26",
+      "fare": 0
+    },
+    {
+      "station_id": 68,
+      "arrival_time": "11:27",
+      "departure_time": "11:28",
+      "fare": 2
+    },
+    {
+      "station_id": 29,
+      "arrival_time": "11:41",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 117
+POST /api/trains
+{
+  "train_id": 30,
+  "train_name": "Drutojan Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 29,
+      "arrival_time": null,
+      "departure_time": "11:51",
+      "fare": 0
+    },
+    {
+      "station_id": 69,
+      "arrival_time": "11:52",
+      "departure_time": "11:53",
+      "fare": 9999
+    },
+    {
+      "station_id": 30,
+      "arrival_time": "12:11",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 118
+POST /api/trains
+{
+  "train_id": 31,
+  "train_name": "Dolanchapa Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 30,
+      "arrival_time": null,
+      "departure_time": "12:16",
+      "fare": 0
+    },
+    {
+      "station_id": 70,
+      "arrival_time": "12:17",
+      "departure_time": "12:18",
+      "fare": 2
+    },
+    {
+      "station_id": 31,
+      "arrival_time": "12:31",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 119
+POST /api/trains
+{
+  "train_id": 32,
+  "train_name": "Kapotaksha Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 31,
+      "arrival_time": null,
+      "departure_time": "12:41",
+      "fare": 0
+    },
+    {
+      "station_id": 71,
+      "arrival_time": "12:42",
+      "departure_time": "12:43",
+      "fare": 9999
+    },
+    {
+      "station_id": 32,
+      "arrival_time": "13:01",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 120
+POST /api/trains
+{
+  "train_id": 33,
+  "train_name": "Simanta Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 32,
+      "arrival_time": null,
+      "departure_time": "13:06",
+      "fare": 0
+    },
+    {
+      "station_id": 72,
+      "arrival_time": "13:07",
+      "departure_time": "13:08",
+      "fare": 2
+    },
+    {
+      "station_id": 33,
+      "arrival_time": "13:21",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 121
+POST /api/trains
+{
+  "train_id": 34,
+  "train_name": "Rangpur Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 33,
+      "arrival_time": null,
+      "departure_time": "13:31",
+      "fare": 0
+    },
+    {
+      "station_id": 73,
+      "arrival_time": "13:32",
+      "departure_time": "13:33",
+      "fare": 9999
+    },
+    {
+      "station_id": 34,
+      "arrival_time": "13:51",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 122
+POST /api/trains
+{
+  "train_id": 35,
+  "train_name": "Kurigram Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 34,
+      "arrival_time": null,
+      "departure_time": "13:56",
+      "fare": 0
+    },
+    {
+      "station_id": 74,
+      "arrival_time": "13:57",
+      "departure_time": "13:58",
+      "fare": 2
+    },
+    {
+      "station_id": 35,
+      "arrival_time": "14:11",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 123
+POST /api/trains
+{
+  "train_id": 36,
+  "train_name": "Banalata Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 35,
+      "arrival_time": null,
+      "departure_time": "14:21",
+      "fare": 0
+    },
+    {
+      "station_id": 75,
+      "arrival_time": "14:22",
+      "departure_time": "14:23",
+      "fare": 9999
+    },
+    {
+      "station_id": 36,
+      "arrival_time": "14:41",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 124
+POST /api/trains
+{
+  "train_id": 37,
+  "train_name": "Panchagarh Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 36,
+      "arrival_time": null,
+      "departure_time": "14:46",
+      "fare": 0
+    },
+    {
+      "station_id": 76,
+      "arrival_time": "14:47",
+      "departure_time": "14:48",
+      "fare": 2
+    },
+    {
+      "station_id": 37,
+      "arrival_time": "15:01",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 125
+POST /api/trains
+{
+  "train_id": 38,
+  "train_name": "Padatik Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 37,
+      "arrival_time": null,
+      "departure_time": "15:11",
+      "fare": 0
+    },
+    {
+      "station_id": 77,
+      "arrival_time": "15:12",
+      "departure_time": "15:13",
+      "fare": 9999
+    },
+    {
+      "station_id": 38,
+      "arrival_time": "15:31",
+      "departure_time": null,
+      "fare": 1000
+    }
+  ]
+}
+
+Test 126
+POST /api/trains
+{
+  "train_id": 39,
+  "train_name": "Nilsagor Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 38,
+      "arrival_time": null,
+      "departure_time": "15:36",
+      "fare": 0
+    },
+    {
+      "station_id": 78,
+      "arrival_time": "15:37",
+      "departure_time": "15:38",
+      "fare": 2
+    },
+    {
+      "station_id": 39,
+      "arrival_time": "15:51",
+      "departure_time": null,
+      "fare": 2
+    }
+  ]
+}
+
+Test 127
+POST /api/trains
+{
+  "train_id": 40,
+  "train_name": "Sagordari Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 32,
+      "arrival_time": null,
+      "departure_time": "13:06",
+      "fare": 0
+    },
+    {
+      "station_id": 40,
+      "arrival_time": "13:07",
+      "departure_time": null,
+      "fare": 99999999
+    }
+  ]
+}
+
+Test 128
+POST /api/trains
+{
+  "train_id": 41,
+  "train_name": "Madhumati Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 80,
+      "arrival_time": null,
+      "departure_time": "00:05",
+      "fare": 0
+    },
+    {
+      "station_id": 77,
+      "arrival_time": "00:40",
+      "departure_time": "01:40",
+      "fare": 60
+    },
+    {
+      "station_id": 71,
+      "arrival_time": "02:20",
+      "departure_time": null,
+      "fare": 60
+    }
+  ]
+}
+
+Test 129
+POST /api/trains
+{
+  "train_id": 42,
+  "train_name": "Hawr Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 80,
+      "arrival_time": null,
+      "departure_time": "00:05",
+      "fare": 0
+    },
+    {
+      "station_id": 77,
+      "arrival_time": "00:40",
+      "departure_time": "01:40",
+      "fare": 30
+    },
+    {
+      "station_id": 74,
+      "arrival_time": "02:20",
+      "departure_time": null,
+      "fare": 15
+    }
+  ]
+}
+
+Test 130
+POST /api/trains
+{
+  "train_id": 43,
+  "train_name": "Karnafuli Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 77,
+      "arrival_time": null,
+      "departure_time": "00:50",
+      "fare": 0
+    },
+    {
+      "station_id": 74,
+      "arrival_time": "01:20",
+      "departure_time": "01:30",
+      "fare": 60
+    },
+    {
+      "station_id": 64,
+      "arrival_time": "02:10",
+      "departure_time": null,
+      "fare": 60
+    }
+  ]
+}
+
+Test 131
+POST /api/trains
+{
+  "train_id": 44,
+  "train_name": "Meghna Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 64,
+      "arrival_time": null,
+      "departure_time": "02:20",
+      "fare": 0
+    },
+    {
+      "station_id": 61,
+      "arrival_time": "02:50",
+      "departure_time": "03:00",
+      "fare": 30
+    },
+    {
+      "station_id": 56,
+      "arrival_time": "03:40",
+      "departure_time": null,
+      "fare": 15
+    }
+  ]
+}
+
+Test 132
+POST /api/trains
+{
+  "train_id": 45,
+  "train_name": "Bijoy Express",
+  "capacity": 300,
+  "stops": [
+    {
+      "station_id": 56,
+      "arrival_time": null,
+      "departure_time": "03:50",
+      "fare": 0
+    },
+    {
+      "station_id": 53,
+      "arrival_time": "04:20",
+      "departure_time": "04:30",
+      "fare": 60
+    },
+    {
+      "station_id": 43,
+      "arrival_time": "05:10",
+      "departure_time": null,
+      "fare": 60
+    }
+  ]
+}
+
+Test 133
+POST /api/trains
+{
+  "train_id": 46,
+  "train_name": "Sonar Bangla Express",
+  "capacity": 300,
+  "stops": []
+}
+
+Test 134
+GET /api/wallets/2
+
+Test 135
+GET /api/wallets/99
+
+Test 136
+PUT /api/wallets/2
+{
+  "recharge": 100
+}
+
+Test 137
+PUT /api/wallets/99
+{
+  "recharge": 100
+}
+
+Test 138
+PUT /api/wallets/2
+{
+  "recharge": 10001
+}
+
+Test 139
+GET /api/wallets/2
+
+Test 140
+GET /api/stations
+
+Test 141
+GET /api/stations/1/trains
+
+Test 142
+GET /api/stations/77/trains
+
+Test 143
+POST /api/tickets
+{
+  "wallet_id": 5,
+  "time_after": "00:00",
+  "station_from": 1,
+  "station_to": 40
+}
+
+Test 144
+POST /api/tickets
+{
+  "wallet_id": 5,
+  "time_after": "00:00",
+  "station_from": 30,
+  "station_to": 80
+}
+
+Test 145
+POST /api/tickets
+{
+  "wallet_id": 5,
+  "time_after": "00:00",
+  "station_from": 41,
+  "station_to": 40
+}
+
+Test 146
+PUT /api/wallets/5
+{
+  "recharge": 342
+}
+
+Test 147
+POST /api/tickets
+{
+  "wallet_id": 5,
+  "time_after": "00:00",
+  "station_from": 41,
+  "station_to": 40
+}
+
+Test 148
+GET /api/routes?from=30&to=80&optimize=cost
+
+Test 149
+GET /api/routes?from=80&to=43&optimize=cost
+
+Test 150
+GET /api/routes?from=80&to=74&optimize=time
